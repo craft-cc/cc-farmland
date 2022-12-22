@@ -1,5 +1,10 @@
  
+require("debug")
+debug(true)
+
+Worker = {}
 Controller = {}
+Station = {}
 
 Controller["DefaultDireciton"] = {
     FRONT = "south",
@@ -40,44 +45,149 @@ function Controller:turnLeft(currentDirection)
 end
 
 function Controller:faceToFront(currentDirection)
-    --print("[FaceToFront] CURRENT DIRECTION: " .. currentDirection)
+    logger("[FaceToFront] CURRENT DIRECTION: " .. currentDirection)
     while Controller.DefaultDireciton.FRONT ~= currentDirection do
         currentDirection = turnRight(currentDirection)
-        --print("NEW CURRENT DIRECTION: " .. currentDirection)
+        logger("NEW CURRENT DIRECTION: " .. currentDirection)
     end
-    --print("*NEW* CURRENT DIRECTION: " .. currentDirection)
+    logger("*NEW* CURRENT DIRECTION: " .. currentDirection)
     return currentDirection
 
 end
 
 function Controller:faceToBack(currentDirection)
-    --print("[FaceToBack] CURRENT DIRECTION: " .. currentDirection)
+    logger("[FaceToBack] CURRENT DIRECTION: " .. currentDirection)
     while Controller.DefaultDireciton.BACK ~= currentDirection do
         currentDirection = turnRight(currentDirection)
-        --print("NEW CURRENT DIRECTION: " .. currentDirection)
+        logger("NEW CURRENT DIRECTION: " .. currentDirection)
     end
-    --print("*NEW* CURRENT DIRECTION: " .. currentDirection)
+    logger("*NEW* CURRENT DIRECTION: " .. currentDirection)
     return currentDirection
 
 end
 
 function Controller:faceToLeft(currentDirection)
-    --print("[FaceToLeft] CURRENT DIRECTION: " .. currentDirection)
+    logger("[FaceToLeft] CURRENT DIRECTION: " .. currentDirection)
     while Controller.DefaultDireciton.LEFT ~= currentDirection do
         currentDirection = turnLeft(currentDirection)
-        --print("NEW CURRENT DIRECTION: " .. currentDirection)
+        logger("NEW CURRENT DIRECTION: " .. currentDirection)
     end
-    --print("*NEW* CURRENT DIRECTION: " .. currentDirection)
+    logger("*NEW* CURRENT DIRECTION: " .. currentDirection)
     return currentDirection
 
 end
 
 function Controller:faceToRight(currentDirection)
-    --print("[FaceToRight] CURRENT DIRECTION: " .. currentDirection)
+    logger("[FaceToRight] CURRENT DIRECTION: " .. currentDirection)
     while Controller.DefaultDireciton.RIGHT ~= currentDirection do
-        --print("NEW CURRENT DIRECTION: " .. currentDirection)
+        logger("NEW CURRENT DIRECTION: " .. currentDirection)
         currentDirection = turnRight(currentDirection)
     end
-    --print("*NEW* CURRENT DIRECTION: " .. currentDirection)
+    logger("*NEW* CURRENT DIRECTION: " .. currentDirection)
     return currentDirection
+end
+
+
+
+local function moveInRows(fromRow, fromColumn, toRow, toColumn, direction)
+    if fromRow > toRow then
+        direction = Controller:faceToBack(direction)
+        for row = toRow, fromRow - 1 do
+            local success, msg = turtle.forward()
+        end
+    elseif fromRow < toRow then
+        direction = Controller:faceToFront(direction)
+        for row = toRow - 1, fromRow, -1 do
+            local success, msg = turtle.forward()
+        end
+    end
+end
+
+local function moveInColumns(fromRow, fromColumn, toRow, toColumn, direction)
+    if fromColumn > toColumn then
+        direction = Controller:faceToLeft(direction)
+        for col = toColumn, fromColumn - 1 do
+            turtle.forward()
+        end
+    elseif fromColumn < toColumn then
+        direction = Controller:faceToRight(direction)
+        for col = toColumn - 1, fromColumn, -1 do
+            turtle.forward()
+        end
+    end
+    
+end
+
+
+ function Controller:toPosition(fromRow, fromColumn, toRow, toColumn, direction)
+    if direction == nil then
+        direction = Controller.DefaultDireciton.FRONT
+    end
+    moveInRows(fromRow, fromColumn, toRow, toColumn, direction) --   __
+    moveInColumns(fromRow, fromColumn, toRow, toColumn, direction) --   | 
+    return direction
+end
+
+function Controller:recheckDirection()
+
+    local function getNewLocation(action)
+        local locationInMove = nil
+        if action == 'forward' then
+            if not Worker:forward() then 
+                getNewLocation("right")
+            else
+                locationInMove = Worker:location()
+                Worker:undo()
+            end
+        end
+        if action == "right" then
+            if not Worker:right() then 
+                getNewLocation("left")
+            else
+                locationInMove = Worker:location()
+                Worker:undo()
+            end
+        end
+        if action == "left" then
+            if not Worker:left() then 
+                getNewLocation("back")
+            else
+                locationInMove = Worker:location()
+                Worker:undo()
+            end
+        end
+        if action == "back" then
+            if not Worker:left() then
+                assert(false,"Impossible to move!")
+            else
+                locationInMove = Worker:location()
+                Worker:undo()
+            end
+        end
+        return locationInMove
+    end
+    local function compareLocations(originLocation, currentLocation)
+        
+        local result = nil
+
+        if result == DefaultDireciton.FRONT then
+            return Controller.DefaultDireciton.FRONT
+        end
+        if result == DefaultDireciton.RIGHT then
+            return Controller.DefaultDireciton.RIGHT
+        end
+        if result == DefaultDireciton.LEFT then
+            return Controller.DefaultDireciton.LEFT
+        end
+        if result == DefaultDireciton.BACK then
+            return Controller.DefaultDireciton.BACK
+        end
+    end
+
+    local turtleX,turtleY,turtleZ = Worker:location()
+    if not turtleX then return nil end
+    local stationLocation = Station:getStationLocation()
+    local afterMoveLocation = getNewLocation()
+
+
 end
