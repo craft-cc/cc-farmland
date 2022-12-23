@@ -11,17 +11,14 @@ Whether you're a beginner or an experienced farmer, cc-farmland has something to
 - Works with Mystical Agriculture mod
 
 ## Requirements
-- Computercraft
-- Mystical Agriculture mod
+- [CC: Tweaked](https://tweaked.cc/)
+- [Mystical Agriculture](https://modrinth.com/mod/mystical-agriculture)
 
 ## Installation
-TODO: Add installation instructions here
+TODO
 
 ## Usage
-TODO: Add usage instructions here
-
-## Credits
-TODO: Add credits here (if applicable)
+TODO
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [MIT License](https://opensource.org/licenses/MIT) for details.
