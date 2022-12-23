@@ -1,8 +1,8 @@
 # cc-farmland
 
-cc-farmland is a tool for Computercraft that manages a mystical agriculture farm. It includes a variety of programs designed to help automate and optimize various aspects of farming with the Mystical Agriculture mod, such as planting, watering, harvesting, and breeding. The tool includes a user-friendly interface that allows players to easily monitor and control their farm from their Computercraft terminal.
+cc-farmland is a tool for Computercraft that manages a mystical agriculture farm using both the Mystical Agriculture and Botany Pots mods. It includes a variety of programs designed to help automate and optimize various aspects of farming, such as planting, harvesting, and breeding. The tool includes a user-friendly interface that allows players to easily monitor and control their farm from their Computercraft terminal.
 
-Whether you're a beginner or an experienced farmer, cc-farmland has something to offer for those looking to use Mystical Agriculture in their gameplay.
+Whether you're a beginner or an experienced farmer, cc-farmland has something to offer for those looking to use Mystical Agriculture and Botany Pots in their gameplay.
 
 ## Features
 - Automates various farming tasks
@@ -13,6 +13,7 @@ Whether you're a beginner or an experienced farmer, cc-farmland has something to
 ## Requirements
 - [CC: Tweaked](https://tweaked.cc/)
 - [Mystical Agriculture](https://modrinth.com/mod/mystical-agriculture)
+- [Botany Pots](https://github.com/Darkhax-Minecraft/BotanyPots/wiki)
 
 ## Installation
 TODO
