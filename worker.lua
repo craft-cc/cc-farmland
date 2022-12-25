@@ -73,7 +73,7 @@ local function executeAction(actionType, nTimes)
             local action = { actionType, nTimes }
             print("Worker.actionsHistory[#Worker.actionsHistory + 1] = ",action)
             Worker.actionsHistory[#Worker.actionsHistory + 1] = action
-            print("Worker.actionsHistory[#Worker.actionsHistory + 1]",Worker.actionsHistory[#Worker.actionsHistory + 1])
+            print("Worker.actionsHistory[#Worker.actionsHistory + 1]",Worker.actionsHistory[#Worker.actionsHistory])
             return true
         end
     end
@@ -216,7 +216,7 @@ function Worker:undo()
     print("Worker:undo()")
     local function getLastAction(history)
         print(#history)
-        local result  = history[#history + 1]
+        local result  = history[#history]
         return result[1],result[2]
     end
 
