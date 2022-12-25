@@ -164,11 +164,13 @@ end
 
 
 function Worker:forward(nTimes)
+    logger("Worker:forward")
     return executeAction(ActionsTypes.FORWARD, nTimes)
 end
 
 
 function Worker:turnRight(nTimes)
+    logger("Worker:turnRight")
     local error  = not executeAction(ActionsTypes.TURN_RIGHT, nTimes)
     if error then
         return false
@@ -177,6 +179,7 @@ function Worker:turnRight(nTimes)
 end
 
 function Worker:turnLeft(nTimes)
+    logger("Worker:turnLeft")
     local error  = not executeAction(ActionsTypes.TURN_LEFT, nTimes)
     if error then
         return false
@@ -185,12 +188,14 @@ function Worker:turnLeft(nTimes)
 end
 
 function Worker:right(nTimes)
+    logger("Worker:right")
     Worker:turnRight(nTimes)
     Worker:forward(nTimes)
 
 end
 
 function Worker:left(nTimes)
+    logger("Worker:left")
     if Worker:turnLeft(nTimes) and Worker:forward(nTimes) then
         return true
     end
@@ -199,15 +204,17 @@ function Worker:left(nTimes)
 end
 
 function Worker:back(nTimes)
+    logger("Worker:back")
     return executeAction(ActionsTypes.BACK, nTimes)
 end
 
 
 
 function Worker:undo()
-
+    print("Worker:undo()")
     local function getLastAction(history)
-        return history[#history + 1]
+        local result  = history[#history + 1]
+        return result[1],result[2]
     end
 
     local function opositeAction(actionType)
@@ -233,7 +240,9 @@ function Worker:undo()
 
     local history = Worker.actionsHistory
     local recentAction, nTimes = getLastAction(history)
+    print("recentAction",recentAction)
     local action = opositeAction(recentAction)
+    print("opositeAction",action)
     executeAction(action, nTimes)
     table.remove(history, #history)
 end
