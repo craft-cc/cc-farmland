@@ -1,0 +1,36 @@
+{
+    "workplace":{
+        "lenght": 16,
+        "width": 16,
+        "pots":[
+            {
+                "status": "empty",
+                "seed": null,
+                "farmland":null,
+                "gridArea": "1x1",
+                "location": [231,21,31]
+            },
+            {
+                "status": "working",
+                "seed": "iron_seeds",
+                "farmland":"insanus_enfermus",
+                "gridArea": "5x5",
+                "location": [231,21,31]
+            },
+            {
+                "status": "waiting_seed",
+                "seed": null,
+                "farmland":"insanus_enfermus",
+                "gridArea": "5x5",
+                "location": [231,21,31]
+            },
+            {
+                "status": "waiting_farmland",
+                "seed": "iron_seeds",
+                "farmland":"insanus_enfermus",
+                "gridArea": "5x5",
+                "location": [231,21,31]
+            }
+        ]
+    }
+}
