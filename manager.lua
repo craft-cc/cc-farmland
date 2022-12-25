@@ -1,7 +1,7 @@
  
 require("debug")
 require("controller")
-farmlandData = unserialiseJSON(farmlandDataJson)
+farmlandData = nil-- unserialiseJSON(farmlandDataJson)
 debug(true)
 
 
