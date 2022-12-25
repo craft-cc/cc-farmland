@@ -38,8 +38,8 @@ end
 
 local function scan()
     local workplace = getWorkplaceData()
-    local size = workplace.width
-    for row = 1, workplace.lenght do
+    local size = tonumber(workplace.width)
+    for row = 1, tonumber(workplace.lenght) do
         if (Worker.relativeRight == Worker.direction) then
             Controler:moveByRightCol(row, size)
         else
