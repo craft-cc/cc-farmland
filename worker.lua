@@ -222,6 +222,7 @@ function Worker:undo()
 end
 
 function Worker:location(array)
+    logger("Worker:location")
     local x, y, z = gps.locate()
     if array then
         return { x, z, y }

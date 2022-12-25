@@ -56,14 +56,14 @@ function Controller:toPosition(fromRow, fromColumn, toRow, toColumn)
 end
 
 function Controller:recheckDirection()
-
+    logger("RecheckDirection")
     local function getMovementInfo(action)
         local locationInMove = nil
         if action == ActionsTypes.FORWARD then
             if not Worker:forward() then
                 getMovementInfo(ActionsTypes.RIGHT)
             else
-                locationInMove = Worker:location()
+                locationInMove = Worker:location(true)
                 Worker:undo()
             end
         end
@@ -71,7 +71,7 @@ function Controller:recheckDirection()
             if not Worker:right() then
                 getMovementInfo(ActionsTypes.LEFT)
             else
-                locationInMove = Worker:location()
+                locationInMove = Worker:location(true)
                 Worker:undo()
             end
         end
@@ -79,7 +79,7 @@ function Controller:recheckDirection()
             if not Worker:left() then
                 getMovementInfo(ActionsTypes.BACK)
             else
-                locationInMove = Worker:location()
+                locationInMove = Worker:location(true)
                 Worker:undo()
             end
         end
@@ -94,10 +94,8 @@ function Controller:recheckDirection()
         return locationInMove
     end
 
-    local function compareLocations(originLocation, afterMoveInfo)
-        local action, afterMoveLocation = afterMoveInfo[1], afterMoveInfo[2]
-
-        local locationInMove = getMoveInfo()
+    local function getDirection()
+        local locationInMove = getMovementInfo()
         local turtleX, turtleZ = locationInMove[1], locationInMove[2]
 
         if not turtleX then return nil end
@@ -126,4 +124,7 @@ function Controller:recheckDirection()
             end
         end
     end
+
+    local direciton = getDirection()
+    logger("Direction: ", direciton)
 end
