@@ -94,8 +94,12 @@ local function setup()
 end
 
 function run()
-    setup()    
-    if #arg > 0 and arg[1] == 'scan' then
+
+    if #arg <= 0 then
+        return "No argument provided"    
+    end
+    setup()
+    if arg[1] == 'scan' then
         return scan()
     end
 
