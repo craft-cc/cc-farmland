@@ -45,7 +45,7 @@ function logger(input,level,source)
         if not source then
             source = "DEBUG"
         end
-        local line = "["..source:upper().."] " .. input
+        local line = "["..source:upper().."] " .. tostring(input)
         lines[#lines + 1] = line
         print(line)
     end
