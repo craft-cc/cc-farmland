@@ -32,7 +32,7 @@ local function getWorkplaceData()
         file.close()
         return textutils.unserialiseJSON(contents)
     end
-    local workplace = read_file("farmland_data.json");
+    local workplace = read_file("./farmland/farmland_data.json");
     return workplace    
 end
 
