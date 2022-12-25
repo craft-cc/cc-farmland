@@ -76,6 +76,7 @@ local function executeAction(actionType, nTimes)
     end
 end
 
+
 local function changeDirection(currentDirection, actionType)
 
     local function setWorkerRelativeDirections(direction)
@@ -160,8 +161,26 @@ local function changeDirection(currentDirection, actionType)
 
 end
 
+
 function Worker:forward(nTimes)
     return executeAction(ActionsTypes.FORWARD, nTimes)
+end
+
+
+function Worker:turnRight(nTimes)
+    local error  = not executeAction(ActionsTypes.TURN_RIGHT, nTimes)
+    if error then
+        return false
+    end
+    changeDirection(Worker.direction)
+end
+
+function Worker:turnLeft(nTimes)
+    local error  = not executeAction(ActionsTypes.TURN_LEFT, nTimes)
+    if error then
+        return false
+    end
+    changeDirection(Worker.direction)
 end
 
 function Worker:right(nTimes)
@@ -182,21 +201,7 @@ function Worker:back(nTimes)
     return executeAction(ActionsTypes.BACK, nTimes)
 end
 
-function Worker:turnRight(nTimes)
-    local error  = not executeAction(ActionsTypes.TURN_RIGHT, nTimes)
-    if error then
-        return false
-    end
-    changeDirection(Worker.direction)
-end
 
-function Worker:turnLeft(nTimes)
-    local error  = not executeAction(ActionsTypes.TURN_LEFT, nTimes)
-    if error then
-        return false
-    end
-    changeDirection(Worker.direction)
-end
 
 function Worker:undo()
 
@@ -231,6 +236,11 @@ function Worker:undo()
     executeAction(action, nTimes)
     table.remove(history, #history)
 end
+
+
+
+
+
 
 function Worker:location(array)
     logger("Worker:location")
