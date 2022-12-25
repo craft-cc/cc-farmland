@@ -161,7 +161,7 @@ local function changeDirection(currentDirection, actionType)
 end
 
 function Worker:forward(nTimes)
-    executeAction(ActionsTypes.FORWARD, nTimes)
+    return executeAction(ActionsTypes.FORWARD, nTimes)
 end
 
 function Worker:right(nTimes)
@@ -171,21 +171,30 @@ function Worker:right(nTimes)
 end
 
 function Worker:left(nTimes)
-    Worker:turnleft(nTimes)
-    Worker:forward(nTimes)
+    if Worker:turnleft(nTimes) and Worker:forward(nTimes) then
+        return true
+    end
+    return false
+
 end
 
 function Worker:back(nTimes)
-    executeAction(ActionsTypes.BACK, nTimes)
+    return executeAction(ActionsTypes.BACK, nTimes)
 end
 
 function Worker:turnRight(nTimes)
-    executeAction(ActionsTypes.TURN_RIGHT, nTimes)
+    local error  = not executeAction(ActionsTypes.TURN_RIGHT, nTimes)
+    if error then
+        return false
+    end
     changeDirection(Worker.direction)
 end
 
 function Worker:turnLeft(nTimes)
-    executeAction(ActionsTypes.TURN_LEFT, nTimes)
+    local error  = not executeAction(ActionsTypes.TURN_LEFT, nTimes)
+    if error then
+        return false
+    end
     changeDirection(Worker.direction)
 end
 
