@@ -63,8 +63,9 @@ function Controller:recheckDirection()
         end
         local locationInMove = nil
         if action == ActionsTypes.FORWARD then
+            print("IF ",action)
             if not Worker:forward() then
-                getMovementInfo(ActionsTypes.RIGHT)
+                return getMovementInfo(ActionsTypes.RIGHT)
             else
                 locationInMove = Worker:location(true)
                 Worker:undo()
@@ -73,7 +74,7 @@ function Controller:recheckDirection()
         end
         if action == ActionsTypes.RIGHT then
             if not Worker:right() then
-                getMovementInfo(ActionsTypes.LEFT)
+                return getMovementInfo(ActionsTypes.LEFT)
             else
                 locationInMove = Worker:location(true)
                 Worker:undo()
@@ -82,7 +83,7 @@ function Controller:recheckDirection()
         end
         if action == ActionsTypes.LEFT then
             if not Worker:left() then
-                getMovementInfo(ActionsTypes.BACK)
+                return getMovementInfo(ActionsTypes.BACK)
             else
                 locationInMove = Worker:location(true)
                 Worker:undo()
