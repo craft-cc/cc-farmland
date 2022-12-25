@@ -72,6 +72,7 @@ local function executeAction(actionType, nTimes)
         else
             local action = { actionType, nTimes }
             Worker.actionsHistory[#Worker.actionsHistory + 1] = action
+            return true
         end
     end
 end
