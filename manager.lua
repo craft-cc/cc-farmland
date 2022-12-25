@@ -32,8 +32,8 @@ local function getWorkplaceData()
         file.close()
         return textutils.unserialiseJSON(contents)
     end
-    local workplace = read_file("./farmland/farmland_data.json");
-    return workplace    
+    local result = read_file("./farmland/farmland_data.json");
+    return result.workplace    
 end
 
 local function scan()
