@@ -27,7 +27,6 @@ local function writeLines(lines)
     local filepath = FILE_PATH .. os.date('%Y-%m-%d-%H:%M:%S') .. ".txt" 
     local file = fs.open(filepath, "w")
     for k,v in ipairs(lines) do
-        print("GOONNNANNN")
         print(v)
         file.writeLine(v)
     end

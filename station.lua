@@ -4,7 +4,7 @@ require("storage")
 
 Station = {
     Blocks = {
-        IRON_BLOCK = "iron_block",
+        IRON_BLOCK = "quark:iron_plate",
         INVENTORY = "inventory",
     },
     getStorage = Storage
