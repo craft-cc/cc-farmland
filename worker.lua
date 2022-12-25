@@ -71,7 +71,9 @@ local function executeAction(actionType, nTimes)
             error(actionErrorMessage)
         else
             local action = { actionType, nTimes }
+            print("Worker.actionsHistory[#Worker.actionsHistory + 1] = ",action)
             Worker.actionsHistory[#Worker.actionsHistory + 1] = action
+            print("Worker.actionsHistory[#Worker.actionsHistory + 1]",Worker.actionsHistory[#Worker.actionsHistory + 1])
             return true
         end
     end
@@ -213,6 +215,7 @@ end
 function Worker:undo()
     print("Worker:undo()")
     local function getLastAction(history)
+        print(#history)
         local result  = history[#history + 1]
         return result[1],result[2]
     end
