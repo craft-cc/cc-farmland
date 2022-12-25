@@ -41,9 +41,9 @@ local function scan()
     local size = tonumber(workplace.width)
     for row = 1, tonumber(workplace.lenght) do
         if (Worker.relativeRight == Worker.direction) then
-            Controler:moveByRightCol(row, size)
+            Controller:moveByRightCol(row, size)
         else
-            Controler:moveByLeftCol(row, size)
+            Controller:moveByLeftCol(row, size)
         end
     end
 end
