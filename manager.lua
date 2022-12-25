@@ -1,7 +1,6 @@
- 
 require("debug")
 require("controller")
-farmlandData = nil-- unserialiseJSON(farmlandDataJson)
+farmlandData = nil -- unserialiseJSON(farmlandDataJson)
 debug(true)
 
 
@@ -26,39 +25,36 @@ local function parseArguments(arg)
     return targetRow, targetColumn
 end
 
-
-
 local function getWorkplaceData()
     local function read_file(path)
-        local file = io.open(path, "rb") -- r read mode and b binary mode
-        if not file then return nil end
-        local content = file:read "*a" -- *a or *all reads the whole file
-        file:close()
-        return content
+        local file = fs.open(path, "r")
+        local contents = file.readAll()
+        file.close()
+        return textutils.unserialiseJSON(contents)
     end
-    local jsonContent = read_file("farmland_data.json");
-    return textutils.unserializeJSON(jsonContent)
+    local workplace = read_file("farmland_data.json");
+    return workplace    
 end
 
 local function scan()
     local workplace = getWorkplaceData()
     local size = workplace.width
     for row = 1, workplace.lenght do
-        if (Worker.relativeRight == Worker.direction)  then
-            Controler:moveByRightCol(row,size)
+        if (Worker.relativeRight == Worker.direction) then
+            Controler:moveByRightCol(row, size)
         else
-            Controler:moveByLeftCol(row,size)
+            Controler:moveByLeftCol(row, size)
         end
     end
 end
 
-local function plant(selectArea,seed,farmland)
+local function plant(selectArea, seed, farmland)
     local storage = Station:getStorage()
     local inventory = Worker:getInventory()
 
     local function isMinTier()
-       local seedTier = farmlandData.findTier(seed)
-       local farmlandTier = farmlandData.findTier(farmland)
+        local seedTier = farmlandData.findTier(seed)
+        local farmlandTier = farmlandData.findTier(farmland)
         if farmlandTier >= seedTier then
             return true
         end
@@ -74,22 +70,22 @@ local function plant(selectArea,seed,farmland)
     if not inventory:hasItem(seed) then
         local success, item = storage:request(seed)
         if not success then
-           return abort("You don't have " .. seed .. " available in the storage!")
+            return abort("You don't have " .. seed .. " available in the storage!")
         end
         inventory.addItem(item)
     end
     if not inventory:hasItem(farmland) then
         local success, item = storage:request(farmland)
         if not success then
-           return abort("You don't have " .. farmland .. " available in the storage!")
+            return abort("You don't have " .. farmland .. " available in the storage!")
         end
         inventory.addItem(farmland)
     end
-    
+
 end
 
 local function replace()
-    
+
 end
 
 function abort(reasson)
@@ -109,7 +105,7 @@ end
 function run()
 
     if #arg <= 0 then
-        return error("No argument provided" )
+        return error("No argument provided")
     end
     setup()
     if arg[1] == 'scan' then
@@ -119,6 +115,3 @@ function run()
 end
 
 run()
-
-
-
