@@ -190,7 +190,7 @@ function Worker:right(nTimes)
 end
 
 function Worker:left(nTimes)
-    if Worker:turnleft(nTimes) and Worker:forward(nTimes) then
+    if Worker:turnLeft(nTimes) and Worker:forward(nTimes) then
         return true
     end
     return false
