@@ -68,6 +68,7 @@ function Controller:recheckDirection()
             else
                 locationInMove = Worker:location(true)
                 Worker:undo()
+                return locationInMove
             end
         end
         if action == ActionsTypes.RIGHT then
@@ -76,6 +77,7 @@ function Controller:recheckDirection()
             else
                 locationInMove = Worker:location(true)
                 Worker:undo()
+                return locationInMove
             end
         end
         if action == ActionsTypes.LEFT then
@@ -84,6 +86,7 @@ function Controller:recheckDirection()
             else
                 locationInMove = Worker:location(true)
                 Worker:undo()
+                return locationInMove
             end
         end
         if action == ActionsTypes.BACK then
@@ -92,6 +95,7 @@ function Controller:recheckDirection()
             else
                 locationInMove = Worker:location(true)
                 Worker:undo()
+                return locationInMove
             end
         end
         return locationInMove
