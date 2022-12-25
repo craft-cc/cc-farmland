@@ -1,3 +1,4 @@
+Storage = {}
 
 function Storage:requestItem()
     return {name="",amount=0}
