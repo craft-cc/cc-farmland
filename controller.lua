@@ -58,11 +58,10 @@ end
 function Controller:recheckDirection()
     logger("RecheckDirection")
     local function getMovementInfo(action)
-        local locationInMove = nil
         if not action then
             action = ActionsTypes.FORWARD
         end
-        end
+        local locationInMove = nil
         if action == ActionsTypes.FORWARD then
             if not Worker:forward() then
                 getMovementInfo(ActionsTypes.RIGHT)
