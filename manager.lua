@@ -26,6 +26,21 @@ local function parseArguments(arg)
     return targetRow, targetColumn
 end
 
+
+
+local function getWorkplaceData()
+    local function read_file(path)
+        local file = io.open(path, "rb") -- r read mode and b binary mode
+        if not file then return nil end
+        local content = file:read "*a" -- *a or *all reads the whole file
+        file:close()
+        return content
+    end
+    local jsonContent = read_file("farmland_data.json");
+
+    textutils.unserialize("farmland_data.json")
+end
+
 local function scan()
     local workplace = getWorkplaceData()
     local size = workplace.width
@@ -85,7 +100,6 @@ function abort(reasson)
 end
 
 local function setup()
-    logger(Worker:isAtStation())
     if not Worker:isAtStation() then
         Worker:goToStation()
     end
@@ -96,7 +110,7 @@ end
 function run()
 
     if #arg <= 0 then
-        return "No argument provided"    
+        return error("No argument provided" )
     end
     setup()
     if arg[1] == 'scan' then
