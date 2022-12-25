@@ -135,5 +135,5 @@ function Controller:recheckDirection()
     end
 
     local direciton = getDirection()
-    logger("Direction: ", direciton)
+    print("Direction: ",direciton)
 end
