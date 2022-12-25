@@ -58,8 +58,6 @@ end
 function Controller:recheckDirection()
     logger("RecheckDirection")
     local function getMovementInfo(action)
-        logger("RecheckDirection",action)
-
         local locationInMove = nil
         if action == ActionsTypes.FORWARD then
             if not Worker:forward() then
@@ -97,7 +95,7 @@ function Controller:recheckDirection()
     end
 
     local function getDirection()
-        local locationInMove = getMovementInfo()
+        local locationInMove = getMovementInfo(ActionsTypes.FORWARD)
         local turtleX, turtleZ = locationInMove[1], locationInMove[2]
 
         if not turtleX then return nil end
