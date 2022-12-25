@@ -1,3 +1,4 @@
+require("station")
 
 Inventory = {
     addItem = function(fromInventory)
