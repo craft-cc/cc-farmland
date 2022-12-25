@@ -256,9 +256,9 @@ function Worker:isAtStation()
     if dataBottom.name ~= Station.Blocks.IRON_BLOCK then
         return false
     end
-    for type in backTypes do
-        logger(type)
-        if type == Station.Blocks.INVENTORY then
+    for typeK,typeV in pairs(backTypes) do
+        logger(typeV)
+        if typeV == Station.Blocks.INVENTORY then
             return true
         end
     end
