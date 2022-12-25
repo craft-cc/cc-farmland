@@ -1,4 +1,5 @@
 require("station")
+require("debug")
 
 Inventory = {
     addItem = function(fromInventory)
@@ -250,11 +251,13 @@ end
 function Worker:isAtStation()
     local dataBottom = Worker.inspect("bottom")
     local backTypes = { peripheral.getType("back") }
+    logger(dataBottom.name)
 
     if dataBottom.name ~= Station.Blocks.IRON_BLOCK then
         return false
     end
     for type in backTypes do
+        logger(type)
         if type == Station.Blocks.INVENTORY then
             return true
         end

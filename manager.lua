@@ -85,6 +85,7 @@ function abort(reasson)
 end
 
 local function setup()
+    logger(Worker:isAtStation())
     if not Worker:isAtStation() then
         Worker:goToStation()
     end
@@ -98,9 +99,6 @@ function run()
         return scan()
     end
 
-    for arg in args do
-    
-    end
 end
 
 run()
