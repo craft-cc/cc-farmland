@@ -1,4 +1,3 @@
-require("controller")
 
 Inventory = {
     addItem = function(fromInventory)
