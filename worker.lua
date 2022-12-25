@@ -9,7 +9,7 @@ Inventory = {
 }
 
 Worker = {
-    gridLocation = { row = 0, col = 0 },
+    gridLocation = { row  = 0, col = 0 },
     actionsHistory = {},
     direction = nil,
     relativeFront = nil,

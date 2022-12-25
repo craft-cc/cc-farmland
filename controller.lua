@@ -101,7 +101,12 @@ function Controller:recheckDirection()
         local turtleX, turtleZ = locationInMove[1], locationInMove[2]
 
         if not turtleX then return nil end
+        
         local stationLocation = Station:getStationLocation()
+        if not stationLocation then
+            Station:setLocation()
+            stationLocation = Station:getStationLocation()
+        end
 
         local dest_x, dest_z = stationLocation[1], stationLocation[2]
         local dx = dest_x - turtleX

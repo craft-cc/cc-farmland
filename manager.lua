@@ -37,6 +37,9 @@ local function getWorkplaceData()
 end
 
 local function scan()
+    if not Worker.direction then
+        Controller:recheckDirection()
+    end
     local workplace = getWorkplaceData()
     local size = tonumber(workplace.width)
     for row = 1, tonumber(workplace.lenght) do
