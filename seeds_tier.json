@@ -1,0 +1,143 @@
+[
+    {
+        "tier": "tier_1",
+        "seeds": [
+            "inferium_seeds",
+            "stone_seeds",
+            "dirt_seeds",
+            "wood_seeds",
+            "ice_seeds",
+            "deepslate_seeds"
+        ]
+    },
+    {
+        "tier": "tier_2",
+        "seeds": [
+            "nature_seeds",
+            "dye_seeds",
+            "nether_seeds",
+            "coal_seeds",
+            "coral_seeds",
+            "honey_seeds",
+            "amethyst_seeds",
+            "pig_seeds",
+            "chicken_seeds",
+            "coew_seeds",
+            "sheep_seeds",
+            "squid_seeds",
+            "fish_seeds",
+            "slime_seeds",
+            "turtle_seeds",
+            "rubber_seeds",
+            "silicon_seeds",
+            "sulfur_seeds",
+            "aluminum_seeds",
+            "saltpeter_seeds",
+            "apatite_seeds",
+            "limestone_seeds",
+            "menril_seeds"
+        ]
+    },
+    {
+        "tier": "tier_3",
+        "seeds": [
+            "crimson_iron_seeds",
+            "azure_silver_seeds",
+            "iron_seeds",
+            "copper_seeds",
+            "nether_quartz_seeds",
+            "glowstone_seeds",
+            "redstone_seeds",
+            "obisidian_seeds",
+            "prismarine_seeds",
+            "zombie_seeds",
+            "skeleton_seeds",
+            "creeper_seeds",
+            "spider_seeds",
+            "rabbit_seeds",
+            "tin_seeds",
+            "bronze_seeds",
+            "zinc_seeds",
+            "brass_seeds",
+            "silver_seeds",
+            "lead_seeds",
+            "graphite_seeds",
+            "blizz_seeds",
+            "blitz_seeds",
+            "basalz_seeds",
+            "steeleaft_seeds",
+            "ironwood_seeds",
+            "sky_stone_seeds",
+            "certus_quartz_seeds",
+            "quartz_enriched_iron_seeds"
+        ]
+    },
+    {
+        "tier": "tier_4",
+        "seeds": [
+            "gold_seeds",
+            "lapis_lazuli_seeds",
+            "end_seeds",
+            "experience_seeds",
+            "blaze_seeds",
+            "ghast_seeds",
+            "enderman_seeds",
+            "steel_seeds",
+            "nickel_seeds",
+            "constantan_seeds",
+            "electrum_seeds",
+            "invar_seeds",
+            "mithrill",
+            "tungsten_seeds",
+            "titanium_seeds",
+            "uranium_seeds",
+            "chorme_seeds",
+            "ruby_seeds",
+            "sapphire_seeds",
+            "signalum_seeds",
+            "lumium_seeds",
+            "hop_graphite_seeds",
+            "osmium_seeds",
+            "fluorite_seeds",
+            "refined_glowstone_seeds",
+            "refined_obisidian_seeds",
+            "knightmetal_seeds",
+            "fiery_ingot_seeds",
+            "compressed_iron_seeds",
+            "fluix_seeds",
+            "energized_steel_seeds",
+            "blazing_crystal_seeds"
+        ]
+    },
+    {
+        "tier": "tier_5",
+        "seeds": [
+            "diamond_seeds",
+            "emerald_seeds",
+            "netherite_seeds",
+            "wither_skeleton_seeds",
+            "platinum_seeds",
+            "iridium_seeds",
+            "enderium_seeds",
+            "niotic_crystal_seeds",
+            "spireted_crystal_seeds",
+            "uraninite_seeds"
+        ]
+    },
+    {
+        "tier": "tier_6",
+        "seeds": [
+            "nether_start_seeds",
+            "dragon_egg_seeds",
+            "nitro_crystall_seeds"
+        ]
+    },
+    {
+        "tier": "tier_7",
+        "seeds": [
+            "unobtainium_seeds",
+            "allthemodium_seeds",
+            "vibranium_seeds"
+        ]
+    }
+]

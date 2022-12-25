@@ -1,13 +1,24 @@
 require("controller")
 
+Inventory = {
+    addItem = function(fromInventory)
+    end,
+    transferItem = function(toInvetory)
+    end
+}
+
 Worker = {
+    gridLocation = { row = 0, col = 0 },
     actionsHistory = {},
     direction = nil,
     relativeFront = nil,
     relativeRight = nil,
     relativeLeft = nil,
     relativeBack = nil,
+    inventory = Inventory
 }
+
+
 
 
 DirectionTypes = {
@@ -56,7 +67,8 @@ local function executeAction(actionType, nTimes)
         if not doAction() then
             error(actionErrorMessage)
         else
-            action = { actionType, nTimes }
+            local action = { actionType, nTimes }
+            Worker.actionsHistory[#Worker.actionsHistory + 1] = action
         end
     end
 end
@@ -96,7 +108,6 @@ local function changeDirection(currentDirection, actionType)
         end
         return moreDirections
     end
-
 
     if not currentDirection then
         local direction = Controller:recheckDirection()
@@ -178,48 +189,77 @@ end
 function Worker:undo()
 
     local function getLastAction(history)
-
+        return history[#history + 1]
     end
 
-    local function opositeAction(action)
-
+    local function opositeAction(actionType)
+        if actionType == ActionsTypes.FORWARD then
+            return ActionsTypes.BACK
+        end
+        if actionType == ActionsTypes.BACK then
+            return ActionsTypes.FORWARD
+        end
+        if actionType == ActionsTypes.TURN_RIGHT then
+            return ActionsTypes.TURN_LEFT
+        end
+        if actionType == ActionsTypes.TURN_LEFT then
+            return ActionsTypes.TURN_RIGHT
+        end
+        if actionType == ActionsTypes.UP then
+            return ActionsTypes.DOWN
+        end
+        if actionType == ActionsTypes.DOWN then
+            return ActionsTypes.UP
+        end
     end
 
     local history = Worker.actionsHistory
-    local recentAction = getLastAction(history)
-    opositeAction(recentAction)
-    history[#history] = nil
+    local recentAction, nTimes = getLastAction(history)
+    local action = opositeAction(recentAction)
+    executeAction(action, nTimes)
+    table.remove(history, #history)
 end
 
-function Worker:location()
-    local x,y,z = gps.locate()
-    return x,z,y
+function Worker:location(array)
+    local x, y, z = gps.locate()
+    if array then
+        return { x, z, y }
+    end
+    return x, z, y
 end
 
 function Worker.inspect(side)
-    
+
     local function getInspectResult(inspect)
-         
+
         local success, data = inspect()
         if success then
             return data
         end
-        error("Inspect ".. side .. " failed")
+        error("Inspect " .. side .. " failed")
     end
+
     if not side then side = "front" end
     if side == 'front' then return getInspectResult(turtle.inspect) end
     if side == 'top' then return getInspectResult(turtle.inspectUp) end
     if side == 'bottom' then return getInspectResult(turtle.inspectDown) end
-    error("The " ..side.." property you have specified is not supported or does not exist.")
+    error("The " .. side .. " property you have specified is not supported or does not exist.")
 
 end
 
-
 function Worker:isAtStation()
-    local dataBottom  = Worker.inspect("bottom")
-     if dataBottom.name == Station.Blocks.IRON_BLOCK then
-        return true
-     end
+    local dataBottom = Worker.inspect("bottom")
+    local backTypes = { peripheral.getType("back") }
+
+    if dataBottom.name ~= Station.Blocks.IRON_BLOCK then
+        return false
+    end
+    for type in backTypes do
+        if type == Station.Blocks.INVENTORY then
+            return true
+        end
+    end
+
 end
 
 local function faceToRelativeSide(relativeSide)
@@ -227,7 +267,7 @@ local function faceToRelativeSide(relativeSide)
     local function closeToRight(direction)
         -- TODO
         return true
-    end 
+    end
 
     local direction = Worker.direction
     while relativeSide ~= direction do
@@ -256,6 +296,46 @@ function Worker:faceToLeft()
     faceToRelativeSide(Worker.relativeLeft)
 end
 
+function Worker:getGridLocation()
+    return Worker.gridLocation
+end
+
+function Worker:setGridLocation(row, col)
+    Worker.gridLocation = { row = row, col = col }
+end
+
+function Worker:refuel()
+    local function refuelOnStation()
+        local function isFuelLowerThan(limit)
+            local maxFuel = turtle.getFuelLimit()
+            local currentFuel = turtle.getFuelLevel()
+            local value = (100 * currentFuel) / maxFuel
+            return value < limit
+        end
+
+        if isFuelLowerThan(0.80) then
+            turtle.select(1)
+            return turtle.refuel()
+        end
+        return true
+    end
+
+    refuelOnStation()
+
+end
+
+function Worker:goToStation()
+    local gridLocation = Worker:getGridLocation()
+    if (gridLocation.row == 0 or gridLocation.col == 0) then
+        if Worker.direction ~= Worker.relativeFront then
+            Worker:faceToFront()
+        end
+        return
+    end
+    Controller:toPosition(gridLocation.row, gridLocation.col, 1, 1)
+    Worker:faceToFront()
+    Worker:back()
+end
 
 function Worker:insertItem(item)
 

@@ -1,12 +1,17 @@
 
 require("worker")
+require("storage")
+
+
 
 Station = {
     Blocks = {
         IRON_BLOCK = "iron_block",
-        CHEST_BACK = "chest_block",
+        INVENTORY = "inventory",
     },
+    getStorage = Storage
 }
+
 _stationLocation = nil
 
 

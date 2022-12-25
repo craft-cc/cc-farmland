@@ -32,19 +32,36 @@ function Controller:moveInColumns(fromRow, fromColumn, toRow, toColumn)
 
 end
 
+function Controller:moveByRightCol(row,size)
+    local workerLocation = Worker:getGridLocation()
+    local initRow, initCol = workerLocation.row,workerLocation.col
+    for col = 1, size, -1 do
+        Controller:toPosition(initRow,initCol,row, col)
+        Worker:setGridLocation(row, col)
+    end
+end
+
+function Controller:moveByLeftCol(row,size)
+    local workerLocation = Worker:getGridLocation()
+    local initRow, initCol = workerLocation.row,workerLocation.col
+    for col = size, 1, -1 do
+        Controller:toPosition(initRow,initCol,row, col)
+        Worker:setGridLocation(row, col)
+    end
+end
+
 function Controller:toPosition(fromRow, fromColumn, toRow, toColumn)
     Controller:moveInRows(fromRow, fromColumn, toRow, toColumn) --   __
     Controller:moveInColumns(fromRow, fromColumn, toRow, toColumn) --   |
-    return direction
 end
 
 function Controller:recheckDirection()
 
-    local function getMoveInfo(action)
+    local function getMovementInfo(action)
         local locationInMove = nil
         if action == ActionsTypes.FORWARD then
             if not Worker:forward() then
-                getMoveInfo(ActionsTypes.RIGHT)
+                getMovementInfo(ActionsTypes.RIGHT)
             else
                 locationInMove = Worker:location()
                 Worker:undo()
@@ -52,7 +69,7 @@ function Controller:recheckDirection()
         end
         if action == ActionsTypes.RIGHT then
             if not Worker:right() then
-                getMoveInfo(ActionsTypes.LEFT)
+                getMovementInfo(ActionsTypes.LEFT)
             else
                 locationInMove = Worker:location()
                 Worker:undo()
@@ -60,7 +77,7 @@ function Controller:recheckDirection()
         end
         if action == ActionsTypes.LEFT then
             if not Worker:left() then
-                getMoveInfo(ActionsTypes.BACK)
+                getMovementInfo(ActionsTypes.BACK)
             else
                 locationInMove = Worker:location()
                 Worker:undo()
@@ -70,16 +87,19 @@ function Controller:recheckDirection()
             if not Worker:left() then
                 assert(false, "Impossible to move!")
             else
-                locationInMove = Worker:location()
+                locationInMove = Worker:location(true)
                 Worker:undo()
             end
         end
-        return { action, locationInMove }
+        return locationInMove
     end
 
     local function compareLocations(originLocation, afterMoveInfo)
         local action, afterMoveLocation = afterMoveInfo[1], afterMoveInfo[2]
-        local turtleX, turtleZ = Worker:location()
+
+        local locationInMove = getMoveInfo()
+        local turtleX, turtleZ = locationInMove[1], locationInMove[2]
+
         if not turtleX then return nil end
         local stationLocation = Station:getStationLocation()
 
@@ -100,5 +120,5 @@ function Controller:recheckDirection()
                 return DirectionTypes.NORTH
             end
         end
-    end  
+    end
 end
