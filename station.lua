@@ -1,5 +1,3 @@
-
-require("worker")
 require("storage")
 
 
