@@ -18,20 +18,24 @@ function debug(active,pastenbinPut)
 end
 
 
-local function readFileLines()
-    local filepath = FILE_PATH .. ".txt" 
-    local file = fs.open(filepath, "w")
-    return file.readAll()
-end
-
-local function writeLines(lines)
-
+local function createFile()
     if not fs.exists(FOLDER) then
         fs.makeDir(FOLDER)
     end
 
     local filepath = FILE_PATH .. ".txt" 
     local file = fs.open(filepath, "w")
+    return file
+end 
+
+local function readFileLines()
+    local file = createFile()
+    return file.readAll()
+end
+
+local function writeLines(lines)
+
+    local file = createFile()
     for k,v in ipairs(lines) do
         print(v)
         file.writeLine(v)
