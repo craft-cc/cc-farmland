@@ -18,52 +18,28 @@ function debug(active,pastenbinPut)
 end
 
 
-local function createFile()
-    if not fs.exists(FOLDER) then
-        fs.makeDir(FOLDER)
-    end
-
-    local filepath = FILE_PATH .. ".txt" 
-    local file = fs.open(filepath, "w")
-    return file
-end 
-
-local function readFileLines()
-    local file = createFile()
-    return file.readAll()
-end
-
-local function writeLines(lines)
-
-    local file = createFile()
-    for k,v in ipairs(lines) do
-        print(v)
-        file.writeLine(v)
-    end
-    file.close()
-    return filepath
-end
 local function pastenbinPut(filepath)
    local pastebinUrl = put(filepath)
    writeLines({pastebinUrl})
 end
 
-function logger(input,level,source)
-    local lines = readFileLines()
-    if isLogActive then
-        if not source then
-            source = "DEBUG"
-        end
-        local line = "["..source:upper().."] " .. tostring(input)
-        lines[#lines + 1] = line
+local function logger(input, level)
+    if not level then
+        level = PriorityLevels.DEBUG
+    end
+    -- get the name of the file that is calling the logger function
+    local file = debug.getinfo(2, "S").source
+    file = file:sub(2) -- remove the "@" symbol from the beginning of the file name
+    local line = os.date() .. " - " .. level .. " - " .. file .. " - " .. input .. "\n"
+    if not isLogActive then
         print(line)
+        return
     end
-    local filename = writeLines(lines)
-    if httpPut then
-        pastenbinPut(filename)
-    end
-end
-
+    local logFile = fs.open("log.txt", "a")
+    logFile.write(line)
+    logFile.close()
+    print(line)
+  end
 
 
 
