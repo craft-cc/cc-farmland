@@ -23,7 +23,7 @@ local function pastenbinPut(filepath)
    writeLines({pastebinUrl})
 end
 
-local function logger(input, level)
+function logger(input, level)
     if not level then
         level = PriorityLevels.DEBUG
     end
