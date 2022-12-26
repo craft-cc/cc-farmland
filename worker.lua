@@ -164,10 +164,14 @@ local function changeDirection(currentDirection, actionType)
     end
     print(actionType)
     if actionType == ActionsTypes.TURN_RIGHT then
-        setWorkerRelativeDirections(otherDirections(changeDirectionRight()))
+        local newDirection = changeDirectionRight()
+        Worker.direction = newDirection
+        setWorkerRelativeDirections(otherDirections(newDirection))
     end
     if actionType == ActionsTypes.TURN_LEFT then
-        setWorkerRelativeDirections(otherDirections(changeDirectionLeft()))
+        local newDirection = changeDirectionLeft()
+        Worker.direction = newDirection
+        setWorkerRelativeDirections(otherDirections(newDirection))
     end
 
 end
@@ -194,7 +198,7 @@ function Worker:turnLeft(nTimes)
     if error then
         return false
     end
-    changeDirection(Worker.direction)
+    changeDirection(Worker.direction,ActionsTypes.TURN_LEFT)
 end
 
 function Worker:right(nTimes)
