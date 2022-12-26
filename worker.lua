@@ -164,10 +164,10 @@ local function changeDirection(currentDirection, actionType)
     end
 
     if actionType == ActionsTypes.TURN_RIGHT then
-        return changeDirectionRight()
+        setWorkerRelativeDirections(otherDirections(changeDirectionRight()))
     end
     if actionType == ActionsTypes.TURN_LEFT then
-        return changeDirectionLeft()
+        setWorkerRelativeDirections(otherDirections(changeDirectionLeft()))
     end
 
 end
