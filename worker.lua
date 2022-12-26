@@ -304,9 +304,7 @@ function Worker:isAtStation()
 end
 
 local function faceToRelativeSide(relativeSide)
-    if not relativeSide then
-        Controller:recheckDirection()
-    end
+  
     local function closeToRight(direction)
         -- TODO
         return true
@@ -315,7 +313,7 @@ local function faceToRelativeSide(relativeSide)
     local direction = Worker.direction
     while relativeSide ~= direction do
         direction = Worker.direction
-        print(direction,relativeSide)
+        --print(direction,relativeSide)
         if closeToRight(direction) then
             Worker:turnRight()
         else
