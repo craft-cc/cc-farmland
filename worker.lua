@@ -81,8 +81,6 @@ end
 local function changeDirection(currentDirection, actionType)
 
     local function setWorkerRelativeDirections(direction)
-        print(direction)
-        print(direction[1],direction[2],direction[3],direction[4])
         Worker.relativeFront = direction[1]
         Worker.relativeRight = direction[2]
         Worker.relativeLeft = direction[3]
@@ -90,7 +88,6 @@ local function changeDirection(currentDirection, actionType)
     end
 
     local function otherDirections(direction)
-        print(direction)
         local moreDirections = {}
         local options = { DirectionTypes.NORTH, DirectionTypes.EAST, DirectionTypes.WEST, DirectionTypes.SOUTH }
         local targetDirection = direction
@@ -162,7 +159,6 @@ local function changeDirection(currentDirection, actionType)
             return DirectionTypes.SOUTH
         end
     end
-    print(actionType)
     if actionType == ActionsTypes.TURN_RIGHT then
         local newDirection = changeDirectionRight()
         Worker.direction = newDirection
@@ -227,7 +223,6 @@ end
 function Worker:undo()
     print("Worker:undo()")
     local function getLastAction(history)
-        print(#history)
         local result  = history[#history]
         return result[1],result[2]
     end
@@ -318,7 +313,7 @@ local function faceToRelativeSide(relativeSide)
     local direction = Worker.direction
     while relativeSide ~= direction do
         direction = Worker.direction
-        print(direction)
+        print(direction,direction)
         if closeToRight(direction) then
             Worker:turnRight()
         else
