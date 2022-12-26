@@ -40,7 +40,7 @@ local function scan()
     if not Worker.direction then
         local direction = Controller:recheckDirection()
         Worker.direction = direction
-        Worker:changeDirectiion(direction)
+        Worker:changeDirection(direction)
     end
     logger("Worker.relativeFront "..Worker.relativeFront)
     logger("Worker.relativeBack " ..Worker.relativeFront)
