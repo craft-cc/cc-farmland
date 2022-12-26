@@ -71,9 +71,7 @@ local function executeAction(actionType, nTimes)
             error(actionErrorMessage)
         else
             local action = { actionType, nTimes }
-            print("Worker.actionsHistory[#Worker.actionsHistory + 1] = ",action)
             Worker.actionsHistory[#Worker.actionsHistory + 1] = action
-            print("Worker.actionsHistory[#Worker.actionsHistory + 1]",Worker.actionsHistory[#Worker.actionsHistory])
             return true
         end
     end
@@ -83,6 +81,7 @@ end
 local function changeDirection(currentDirection, actionType)
 
     local function setWorkerRelativeDirections(direction)
+        print(direction[1],direction[2],direction[3],direction[4])
         Worker.relativeFront = direction[1]
         Worker.relativeRight = directions[2]
         Worker.relativeLeft = directions[3]
@@ -172,7 +171,7 @@ end
 
 
 function Worker:turnRight(nTimes)
-    logger("Worker:turnRight")
+   --logger("Worker:turnRight")
     local error  = not executeAction(ActionsTypes.TURN_RIGHT, nTimes)
     if error then
         return false
@@ -243,9 +242,7 @@ function Worker:undo()
 
     local history = Worker.actionsHistory
     local recentAction, nTimes = getLastAction(history)
-    print("recentAction",recentAction)
     local action = opositeAction(recentAction)
-    print("opositeAction",action)
     executeAction(action, nTimes)
     table.remove(history, #history)
 end
