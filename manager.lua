@@ -38,7 +38,8 @@ end
 
 local function scan()
     if not Worker.direction then
-        Controller:recheckDirection()
+        local direciton = Controller:recheckDirection()
+        Worker.direction = direciton
     end
     print("Worker.direction,",Worker.direction)
     local workplace = getWorkplaceData()
