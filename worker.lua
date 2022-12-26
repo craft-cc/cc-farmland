@@ -115,7 +115,14 @@ local function changeDirection(currentDirection, actionType)
         return moreDirections
     end
 
-    if not currentDirection then
+    local function anyRelativeNull()
+        if Worker.relativeFront and Worker.relativeBack and Worker.relativeLeft and Worker.relativeRight then
+            return false
+        end
+        return true
+    end
+
+    if not currentDirection or anyRelativeNull() then
         local direction = Controller:recheckDirection()
         if not direction then
             error("RecheckDirection return nil")
