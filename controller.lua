@@ -4,12 +4,15 @@ Controller = {}
 
 
 function Controller:moveInRows(fromRow, fromColumn, toRow, toColumn)
+    logger("Controller:moveInRows")
     if fromRow > toRow then
+        logger("Worker:faceToBack()")
         Worker:faceToBack()
         for row = toRow, fromRow - 1 do
             Worker:forward()
         end
     elseif fromRow < toRow then
+        logger("Worker:faceToFront()")
         Worker:faceToFront()
         for row = toRow - 1, fromRow, -1 do
             Worker:forward()
@@ -18,12 +21,15 @@ function Controller:moveInRows(fromRow, fromColumn, toRow, toColumn)
 end
 
 function Controller:moveInColumns(fromRow, fromColumn, toRow, toColumn)
+    logger("Controller:moveInColumns")
     if fromColumn > toColumn then
+        logger("Worker:faceToLeft()")
         Worker:faceToLeft()
         for col = toColumn, fromColumn - 1 do
             Worker:forward()
         end
     elseif fromColumn < toColumn then
+        logger("Worker:faceToRight()")
         Worker:faceToRight()
         for col = toColumn - 1, fromColumn, -1 do
             Worker:forward()
@@ -51,6 +57,7 @@ function Controller:moveByLeftCol(row,size)
 end
 
 function Controller:toPosition(fromRow, fromColumn, toRow, toColumn)
+    logger(" Controller:toPosition")
     Controller:moveInRows(fromRow, fromColumn, toRow, toColumn) --   __
     Controller:moveInColumns(fromRow, fromColumn, toRow, toColumn) --   |
 end
