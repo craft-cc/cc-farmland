@@ -18,6 +18,12 @@ function debug(active,pastenbinPut)
 end
 
 
+local function readFileLines()
+    local filepath = FILE_PATH .. ".txt" 
+    local file = fs.open(filepath, "w")
+    return file.readAll()
+end
+
 local function writeLines(lines)
 
     if not fs.exists(FOLDER) then
@@ -39,7 +45,7 @@ local function pastenbinPut(filepath)
 end
 
 function logger(input,level,source)
-    local lines = {}
+    local lines = readFileLines()
     if isLogActive then
         if not source then
             source = "DEBUG"
