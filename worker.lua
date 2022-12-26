@@ -309,7 +309,7 @@ local function faceToRelativeSide(relativeSide)
         -- TODO
         return true
     end
-
+    print("FaceToRelativeSide")
     local direction = Worker.direction
     while relativeSide ~= direction do
         direction = Worker.direction
