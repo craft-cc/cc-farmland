@@ -79,7 +79,7 @@ local function executeAction(actionType, nTimes)
 end
 
 
-local function changeDirection(currentDirection, actionType)
+function Worker:changeDirection(currentDirection, actionType)
 
     local function setWorkerRelativeDirections(direction)
         Worker.relativeFront = direction[1]
@@ -186,7 +186,7 @@ function Worker:turnRight(nTimes)
     if error then
         return false
     end
-    changeDirection(Worker.direction,ActionsTypes.TURN_RIGHT)
+    Worker:changeDirection(Worker.direction,ActionsTypes.TURN_RIGHT)
 end
 
 function Worker:turnLeft(nTimes)
@@ -195,7 +195,7 @@ function Worker:turnLeft(nTimes)
     if error then
         return false
     end
-    changeDirection(Worker.direction,ActionsTypes.TURN_LEFT)
+    Worker:hangeDirection(Worker.direction,ActionsTypes.TURN_LEFT)
 end
 
 function Worker:right(nTimes)
