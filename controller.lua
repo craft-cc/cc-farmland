@@ -58,7 +58,7 @@ end
 
 function Controller:toPosition(fromRow, fromColumn, toRow, toColumn)
     logger(" Controller:toPosition")
-    Controller:moveIncdRows(fromRow, fromColumn, toRow, toColumn) --   __
+    Controller:moveInRows(fromRow, fromColumn, toRow, toColumn) --   __
     Controller:moveInColumns(fromRow, fromColumn, toRow, toColumn) --   |
 end
 
