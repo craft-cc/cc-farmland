@@ -304,7 +304,9 @@ function Worker:isAtStation()
 end
 
 local function faceToRelativeSide(relativeSide)
-
+    if not relativeSide then
+        Controller:recheckDirection()
+    end
     local function closeToRight(direction)
         -- TODO
         return true
@@ -323,6 +325,7 @@ local function faceToRelativeSide(relativeSide)
 end
 
 function Worker:faceToFront()
+
     faceToRelativeSide(Worker.relativeFront)
 end
 

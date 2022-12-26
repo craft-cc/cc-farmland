@@ -41,6 +41,11 @@ local function scan()
         local direction = Controller:recheckDirection()
         Worker.direction = direction
     end
+    print(Worker.relativeFront)
+    print(Worker.relativeBack)
+    print(Worker.relativeRight)
+    print(Worker.relativeLeft)
+
     logger("Worker.direction, ".. Worker.direction)
     local workplace = getWorkplaceData()
     local size = tonumber(workplace.width)
