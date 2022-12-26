@@ -24,7 +24,7 @@ local function writeLines(lines)
         fs.makeDir(FOLDER)
     end
 
-    local filepath = FILE_PATH .. os.date('%Y-%m-%d-%H:%M:%S') .. ".txt" 
+    local filepath = FILE_PATH .. ".txt" 
     local file = fs.open(filepath, "w")
     for k,v in ipairs(lines) do
         print(v)
