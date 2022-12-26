@@ -84,9 +84,9 @@ local function changeDirection(currentDirection, actionType)
         print(direction)
         print(direction[1],direction[2],direction[3],direction[4])
         Worker.relativeFront = direction[1]
-        Worker.relativeRight = directions[2]
-        Worker.relativeLeft = directions[3]
-        Worker.relativeBack = directions[4]
+        Worker.relativeRight = direction[2]
+        Worker.relativeLeft = direction[3]
+        Worker.relativeBack = direction[4]
     end
 
     local function otherDirections(direction)
