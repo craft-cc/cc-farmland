@@ -1,4 +1,4 @@
-require("debug")
+require("my_debug")
 require("controller")
 farmlandData = nil -- unserialiseJSON(farmlandDataJson)
 debug(true)

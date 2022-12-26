@@ -1,5 +1,5 @@
 
-
+require "debug"
 require "pbin"
 isLogActive = false
 httpPut = false

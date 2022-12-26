@@ -1,5 +1,5 @@
 require("station")
-require("debug")
+require("my_debug")
 
 Inventory = {
     addItem = function(fromInventory)
