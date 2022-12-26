@@ -162,7 +162,7 @@ local function changeDirection(currentDirection, actionType)
             return DirectionTypes.SOUTH
         end
     end
-
+    print(actionType)
     if actionType == ActionsTypes.TURN_RIGHT then
         setWorkerRelativeDirections(otherDirections(changeDirectionRight()))
     end
@@ -185,6 +185,7 @@ function Worker:turnRight(nTimes)
     if error then
         return false
     end
+    print("Worker.direction",Worker.direction)
     changeDirection(Worker.direction)
 end
 
