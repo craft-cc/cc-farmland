@@ -185,8 +185,7 @@ function Worker:turnRight(nTimes)
     if error then
         return false
     end
-    print("Worker.direction",Worker.direction)
-    changeDirection(Worker.direction)
+    changeDirection(Worker.direction,ActionsTypes.TURN_RIGHT)
 end
 
 function Worker:turnLeft(nTimes)
