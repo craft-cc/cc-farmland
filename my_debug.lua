@@ -29,7 +29,7 @@ function logger(input, level)
     -- get the name of the file that is calling the logger function
    -- local file = debug.getinfo(2, "S").source
     --file = file:sub(2) -- remove the "@" symbol from the beginning of the file name
-    local line = os.date() .. " - " .. level  .. " - " .. input .. "\n"
+    local line = level  .. " - " .. input .. "\n"
     if not isLogActive then
         print(line)
         return
