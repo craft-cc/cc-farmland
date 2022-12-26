@@ -81,6 +81,7 @@ end
 local function changeDirection(currentDirection, actionType)
 
     local function setWorkerRelativeDirections(direction)
+        print(direction)
         print(direction[1],direction[2],direction[3],direction[4])
         Worker.relativeFront = direction[1]
         Worker.relativeRight = directions[2]
@@ -89,6 +90,7 @@ local function changeDirection(currentDirection, actionType)
     end
 
     local function otherDirections(direction)
+        print(direction)
         local moreDirections = {}
         local options = { DirectionTypes.NORTH, DirectionTypes.EAST, DirectionTypes.WEST, DirectionTypes.SOUTH }
         local targetDirection = direction
