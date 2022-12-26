@@ -314,6 +314,7 @@ local function faceToRelativeSide(relativeSide)
     local direction = Worker.direction
     while relativeSide ~= direction do
         direction = Worker.direction
+        print(direction)
         if closeToRight(direction) then
             Worker:turnRight()
         else
