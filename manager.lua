@@ -7,11 +7,17 @@ debug(true)
 
 
 local function parseArguments(arg)
+    logger("FUNC => parseArguments | param (arg): " .. arg)
+
     local function validation(input)
+    logger("FUNC => validation | param (input): " .. input)
+
         return string.match(input, "%d+x%d+")
     end
 
     local function split(input, pattern)
+    logger("FUNC => split | param (input, pattern): " .. input, pattern)
+
         local substrings = {}
         for substring in string.gmatch(input, "[^" .. pattern .. "]+") do
             substrings[#substrings + 1] = substring
@@ -26,6 +32,8 @@ local function parseArguments(arg)
 end
 
 local function getWorkplaceData()
+    logger("FUNC => getWorkplaceData")
+
     local function read_file(path)
         local file = fs.open(path, "r")
         local contents = file.readAll()
@@ -37,6 +45,8 @@ local function getWorkplaceData()
 end
 
 local function scan()
+    logger("FUNC => scan")
+
     if not Worker.direction then
         local direction = Controller:recheckDirection()
         Worker.direction = direction
@@ -60,10 +70,14 @@ local function scan()
 end
 
 local function plant(selectArea, seed, farmland)
+    logger("FUNC => plant | param (selectArea, seed, farmland): " .. selectArea, seed, farmland)
+
     local storage = Station:getStorage()
     local inventory = Worker:getInventory()
 
     local function isMinTier()
+    logger("FUNC => isMinTier")
+
         local seedTier = farmlandData.findTier(seed)
         local farmlandTier = farmlandData.findTier(farmland)
         if farmlandTier >= seedTier then
@@ -96,16 +110,22 @@ local function plant(selectArea, seed, farmland)
 end
 
 local function replace()
+    logger("FUNC => replace")
+
 
 end
 
 function abort(reasson)
+    logger("FUNC => abort | param (reasson): " .. reasson)
+
     logger("*********** ABORT **********")
     logger(reasson)
     error(reasson)
 end
 
 local function setup()
+    logger("FUNC => setup")
+
     if not Worker:isAtStation() then
         Worker:goToStation()
     end
@@ -114,6 +134,8 @@ local function setup()
 end
 
 function run()
+    logger("FUNC => run")
+
 
     if #arg <= 0 then
         return error("No argument provided")
@@ -125,4 +147,19 @@ function run()
 
 end
 
-run()
+
+
+function print_call_stack()
+    local level = 1
+    while true do
+      local info = debug.getinfo(level, "nSl")
+      if not info then break end
+      print(string.format("%d\t%s\t%s:%d", level, info.name, info.source, info.currentline))
+      level = level + 1
+    end
+  end
+
+  xpcall(run, function(err)
+    print(debug.traceback(err))
+    print_call_stack()
+  end)
