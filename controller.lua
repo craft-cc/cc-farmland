@@ -6,13 +6,11 @@ Controller = {}
 function Controller:moveInRows(fromRow, fromColumn, toRow, toColumn)
     logger("Controller:moveInRows")
     if fromRow > toRow then
-        logger("Worker:faceToBack()")
         Worker:faceToBack()
         for row = toRow, fromRow - 1 do
             Worker:forward()
         end
     elseif fromRow < toRow then
-        logger("Worker:faceToFront()")
         Worker:faceToFront()
         for row = toRow - 1, fromRow, -1 do
             Worker:forward()
@@ -23,13 +21,11 @@ end
 function Controller:moveInColumns(fromRow, fromColumn, toRow, toColumn)
     logger("Controller:moveInColumns")
     if fromColumn > toColumn then
-        logger("Worker:faceToLeft()")
         Worker:faceToLeft()
         for col = toColumn, fromColumn - 1 do
             Worker:forward()
         end
     elseif fromColumn < toColumn then
-        logger("Worker:faceToRight()")
         Worker:faceToRight()
         for col = toColumn - 1, fromColumn, -1 do
             Worker:forward()
@@ -70,9 +66,7 @@ function Controller:recheckDirection()
         end
         local locationInMove = nil
         if action == ActionsTypes.FORWARD then
-            local s = Worker:forward()
-            print("IF ",action,s)
-            if not s then
+            if not Worker:forward() then
                 return getMovementInfo(ActionsTypes.RIGHT)
             else
                 locationInMove = Worker:location(true)
@@ -142,6 +136,6 @@ function Controller:recheckDirection()
     end
 
     local direction = getDirection()
-    print("Direction: ",direction)
+    logger("Direction: ")
     return direction
 end

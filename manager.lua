@@ -43,9 +43,9 @@ local function scan()
         Worker:changeDirection(direction)
     end
     logger("Worker.relativeFront "..Worker.relativeFront)
-    logger("Worker.relativeBack " ..Worker.relativeFront)
-    logger("Worker.relativeRight "..Worker.relativeFront)
-    logger("Worker.relativeLeft "..Worker.relativeFront)
+    logger("Worker.relativeBack " ..Worker.relativeBack)
+    logger("Worker.relativeRight "..Worker.relativeRight)
+    logger("Worker.relativeLeft "..Worker.relativeLeft)
 
     logger("Worker.direction, ".. Worker.direction)
     local workplace = getWorkplaceData()

@@ -222,7 +222,7 @@ end
 
 
 function Worker:undo()
-    print("Worker:undo()")
+    logger("Worker:undo()")
     local function getLastAction(history)
         local result  = history[#history]
         return result[1],result[2]
@@ -310,11 +310,11 @@ local function faceToRelativeSide(relativeSide)
         -- TODO
         return true
     end
-    print("FaceToRelativeSide")
+    logger("FaceToRelativeSide")
     local direction = Worker.direction
     while relativeSide ~= direction do
         direction = Worker.direction
-        --print(direction,relativeSide)
+        --logger(direction,relativeSide)
         if closeToRight(direction) then
             Worker:turnRight()
         else
