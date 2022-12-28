@@ -1,85 +1,69 @@
 require("worker")
 Controller = {}
 
-
-function name()
-    logger("FUNC => name")
-
-    logger("Call Func name")
-
-    
-end
-
-function test()
-    logger("FUNC => test")
-
-    logger("Call Func test")
-
-    
-end
-
-
 function Controller:moveInRows(fromRow, fromColumn, toRow, toColumn)
-    logger("FUNC => Controller:moveInRows | param (fromRow, fromColumn, toRow, toColumn): " .. fromRow, fromColumn, toRow, toColumn)
+    logger("FUNC => Controller:moveInRows | param (fromRow, fromColumn, toRow, toColumn): ", fromRow, fromColumn, toRow,
+        toColumn)
+    if fromRow == toRow then
+        return
+    end
 
-    logger("Controller:moveInRows")
+
     if fromRow > toRow then
         Worker:faceToBack()
-        for row = toRow, fromRow - 1 do
-            Worker:forward()
-        end
-    elseif fromRow < toRow then
-        Worker:faceToFront()
-        for row = toRow - 1, fromRow, -1 do
-            Worker:forward()
-        end
+        Worker:forward()
+        return
     end
+    Worker:faceToFront()
+    Worker:forward()
+
 end
 
 function Controller:moveInColumns(fromRow, fromColumn, toRow, toColumn)
-    logger("FUNC => Controller:moveInColumns | param (fromRow, fromColumn, toRow, toColumn): " .. fromRow, fromColumn, toRow, toColumn)
+    logger("FUNC => Controller:moveInColumns | param (fromRow, fromColumn, toRow, toColumn): ", fromRow, fromColumn,
+        toRow, toColumn)
+    if fromColumn == toColumn then
+        return
+    end
 
-    logger("Controller:moveInColumns")
     if fromColumn > toColumn then
         Worker:faceToLeft()
-        for col = toColumn, fromColumn - 1 do
-            Worker:forward()
-        end
+        Worker:forward()
     elseif fromColumn < toColumn then
         Worker:faceToRight()
-        for col = toColumn - 1, fromColumn, -1 do
-            Worker:forward()
-        end
+        Worker:forward()
     end
 
 end
 
-function Controller:moveByRightCol(row,size)
-    logger("FUNC => Controller:moveByRightCol | param (row,size): " .. row,size)
+function Controller:moveByRightCol(row, size)
+    logger("FUNC => Controller:moveByRightCol | param (row,size): ", row, size)
+
 
     local workerLocation = Worker:getGridLocation()
-    local initRow, initCol = workerLocation.row,workerLocation.col
-    for col = 1, size, -1 do
-        Controller:toPosition(initRow,initCol,row, col)
+    local initRow, initCol = workerLocation.row, workerLocation.col
+    for col = 1, size, 1 do
+        Controller:toPosition(initRow, initCol, row, col)
         Worker:setGridLocation(row, col)
     end
 end
 
-function Controller:moveByLeftCol(row,size)
-    logger("FUNC => Controller:moveByLeftCol | param (row,size): " .. row,size)
+function Controller:moveByLeftCol(row, size)
+    logger("FUNC => Controller:moveByLeftCol | param (row,size): ", row, size)
 
     local workerLocation = Worker:getGridLocation()
-    local initRow, initCol = workerLocation.row,workerLocation.col
+    local initRow, initCol = workerLocation.row, workerLocation.col
     for col = size, 1, -1 do
-        Controller:toPosition(initRow,initCol,row, col)
+        Controller:toPosition(initRow, initCol, row, col)
         Worker:setGridLocation(row, col)
     end
 end
 
 function Controller:toPosition(fromRow, fromColumn, toRow, toColumn)
-    logger("FUNC => Controller:toPosition | param (fromRow, fromColumn, toRow, toColumn): " .. fromRow, fromColumn, toRow, toColumn)
+    logger("FUNC => Controller:toPosition | param (fromRow, fromColumn, toRow, toColumn): ", fromRow, fromColumn, toRow,
+        toColumn)
 
-    logger(" Controller:toPosition")
+
     Controller:moveInRows(fromRow, fromColumn, toRow, toColumn) --   __
     Controller:moveInColumns(fromRow, fromColumn, toRow, toColumn) --   |
 end
@@ -87,9 +71,11 @@ end
 function Controller:recheckDirection()
     logger("FUNC => Controller:recheckDirection")
 
-    logger("RecheckDirection")
+
     local function getMovementInfo(action)
-    logger("FUNC => getMovementInfo | param (action): " .. action)
+        logger("FUNC => getMovementInfo | param (action): ", action)
+
+
 
         if not action then
             action = ActionsTypes.FORWARD
@@ -135,13 +121,15 @@ function Controller:recheckDirection()
     end
 
     local function getDirection()
-    logger("FUNC => getDirection")
+        logger("FUNC => getDirection")
+
+
 
         local locationInMove = getMovementInfo()
         local turtleX, turtleZ = locationInMove[1], locationInMove[2]
 
         if not turtleX then return nil end
-        
+
         local stationLocation = Station:getStationLocation()
         if not stationLocation then
             Station:setLocation()
@@ -168,6 +156,5 @@ function Controller:recheckDirection()
     end
 
     local direction = getDirection()
-    logger("Direction: ")
     return direction
 end

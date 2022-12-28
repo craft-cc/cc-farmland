@@ -10,7 +10,7 @@ Inventory = {
 }
 
 Worker = {
-    gridLocation = { row  = 0, col = 0 },
+    gridLocation = { row = 1, col = 1 },
     actionsHistory = {},
     direction = nil,
     relativeFront = nil,
@@ -33,8 +33,8 @@ DirectionTypes = {
 ActionsTypes = {
     FORWARD = "forward",
     BACK = "back",
-    RIGHT ="right",
-    LEFT="left",
+    RIGHT = "right",
+    LEFT = "left",
     TURN_RIGHT = "turn_right",
     TURN_LEFT = "turn_left",
     UP = "up",
@@ -43,13 +43,17 @@ ActionsTypes = {
 
 
 local function executeAction(actionType, nTimes)
-    logger("FUNC => executeAction | param (actionType, nTimes): " .. actionType, nTimes)
+    logger("FUNC => executeAction | param (actionType, nTimes): ", actionType, nTimes)
+
+
 
     local actionErrorMessage = "Move " .. actionType .. " not possible"
     if not nTimes then nTimes = 1 end
 
     local function doAction()
-    logger("FUNC => doAction")
+        logger("FUNC => doAction")
+
+
 
         if actionType == ActionsTypes.FORWARD then
             return turtle.forward()
@@ -75,164 +79,100 @@ local function executeAction(actionType, nTimes)
         if not doAction() then
             error(actionErrorMessage)
         else
-            local action = { actionType, nTimes }
+            local action = { action = actionType, nTimes = nTimes }
             Worker.actionsHistory[#Worker.actionsHistory + 1] = action
-            return true
         end
     end
+    return true
 end
 
-
 function Worker:changeDirection(currentDirection, actionType)
-    logger("FUNC => Worker:changeDirection | param (currentDirection, actionType): " .. currentDirection, actionType)
-
+    logger("FUNC => Worker:changeDirection | param (currentDirection, actionType): ", currentDirection, actionType)
 
     local function setWorkerRelativeDirections(direction)
-    logger("FUNC => setWorkerRelativeDirections | param (direction): " .. direction)
-
+        logger("FUNC => setWorkerRelativeDirections | param (direction): ", direction)
         Worker.relativeFront = direction[1]
         Worker.relativeRight = direction[2]
         Worker.relativeLeft = direction[3]
-        Worker.relativeBack = direction[4]
+        Worker.relativebACK = direction[4]
     end
 
-    local function otherDirections(direction)
-    logger("FUNC => otherDirections | param (direction): " .. direction)
-
-        local moreDirections = {}
-        local options = { DirectionTypes.NORTH, DirectionTypes.EAST, DirectionTypes.WEST, DirectionTypes.SOUTH }
-        local targetDirection = direction
-        moreDirections[#moreDirections + 1] = targetDirection
-        for i = 1, #options + 3, 1 do
-            if #moreDirections == 4 then
-                return moreDirections
-            end
-            local j = i
-            if i > 4 then
-                j = (i - 4)
-            end
-            if targetDirection == options[j] then
-                if not options[j + 1] then
-                    moreDirections[#moreDirections + 1] = options[1]
-                    targetDirection = options[1]
-                else
-                    moreDirections[#moreDirections + 1] = options[j + 1]
-                    targetDirection = moreDirections[#moreDirections]
-                end
-
-            end
-        end
-        return moreDirections
-    end
-
-    local function anyRelativeNull()
-    logger("FUNC => anyRelativeNull")
-
-        if Worker.relativeFront and Worker.relativeBack and Worker.relativeLeft and Worker.relativeRight then
-            return false
-        end
-        return true
-    end
-
-    if not currentDirection or anyRelativeNull() then
-        local direction = Controller:recheckDirection()
-        if not direction then
-            error("RecheckDirection return nil")
-        end
-        Worker.direction = direction
-        setWorkerRelativeDirections(otherDirections(direction))
-    end
-
-    local function changeDirectionRight()
-    logger("FUNC => changeDirectionRight")
-
-        if currentDirection == DirectionTypes.NORTH then
-            return DirectionTypes.EAST
-        end
-        if currentDirection == DirectionTypes.EAST then
-            return DirectionTypes.SOUTH
-        end
-        if currentDirection == DirectionTypes.SOUTH then
-            return DirectionTypes.WEST
-        end
-        if currentDirection == DirectionTypes.WEST then
-            return DirectionTypes.NORTH
+    function swipeDirections(direction)
+        logger("FUNC => swipeDirections | param (direction): ", direction)
+        if direction == DirectionTypes.NORTH then
+            return { DirectionTypes.NORTH, DirectionTypes.EAST, DirectionTypes.WEST, DirectionTypes.SOUTH }
+        elseif direction == DirectionTypes.EAST then
+            return { DirectionTypes.EAST, DirectionTypes.SOUTH, DirectionTypes.NORTH, DirectionTypes.WEST }
+        elseif direction == DirectionTypes.SOUTH then
+            return { DirectionTypes.SOUTH, DirectionTypes.WEST, DirectionTypes.EAST, DirectionTypes.NORTH }
+        elseif direction == DirectionTypes.WEST then
+            return { DirectionTypes.WEST, DirectionTypes.NORTH, DirectionTypes.SOUTH, DirectionTypes.EAST }
         end
     end
 
-    local function changeDirectionLeft()
-    logger("FUNC => changeDirectionLeft")
-
-        if currentDirection == DirectionTypes.NORTH then
-            return DirectionTypes.WEST
-        end
-        if currentDirection == DirectionTypes.EAST then
-            return DirectionTypes.NORTH
-        end
-        if currentDirection == DirectionTypes.SOUTH then
-            return DirectionTypes.EAST
-        end
-        if currentDirection == DirectionTypes.WEST then
-            return DirectionTypes.SOUTH
-        end
-    end
+    local newDirections = swipeDirections(currentDirection)
+    setWorkerRelativeDirections(newDirections)
     if actionType == ActionsTypes.TURN_RIGHT then
-        local newDirection = changeDirectionRight()
-        Worker.direction = newDirection
-        setWorkerRelativeDirections(otherDirections(newDirection))
+        Worker.direction = newDirections[2]
+    elseif actionType == ActionsTypes.TURN_LEFT then
+        Worker.direction = newDirections[3]
     end
-    if actionType == ActionsTypes.TURN_LEFT then
-        local newDirection = changeDirectionLeft()
-        Worker.direction = newDirection
-        setWorkerRelativeDirections(otherDirections(newDirection))
-    end
+    return Worker.direction
 
 end
 
-
 function Worker:forward(nTimes)
-    logger("FUNC => Worker:forward | param (nTimes): " .. nTimes)
+    logger("FUNC => Worker:forward | param (nTimes): ", nTimes)
 
-    logger("Worker:forward")
+
+
+
     return executeAction(ActionsTypes.FORWARD, nTimes)
 end
 
-
 function Worker:turnRight(nTimes)
-    logger("FUNC => Worker:turnRight | param (nTimes): " .. nTimes)
+    logger("FUNC => Worker:turnRight | param (nTimes): ", nTimes)
 
-   --logger("Worker:turnRight")
-    local error  = not executeAction(ActionsTypes.TURN_RIGHT, nTimes)
+
+
+    --
+    local error = not executeAction(ActionsTypes.TURN_RIGHT, nTimes)
     if error then
         return false
     end
-    Worker:changeDirection(Worker.direction,ActionsTypes.TURN_RIGHT)
+    Worker:changeDirection(Worker.direction, ActionsTypes.TURN_RIGHT)
 end
 
 function Worker:turnLeft(nTimes)
-    logger("FUNC => Worker:turnLeft | param (nTimes): " .. nTimes)
+    logger("FUNC => Worker:turnLeft | param (nTimes): ", nTimes)
 
-    logger("Worker:turnLeft")
-    local error  = not executeAction(ActionsTypes.TURN_LEFT, nTimes)
+
+
+
+    local error = not executeAction(ActionsTypes.TURN_LEFT, nTimes)
     if error then
         return false
     end
-    Worker:hangeDirection(Worker.direction,ActionsTypes.TURN_LEFT)
+    Worker:hangeDirection(Worker.direction, ActionsTypes.TURN_LEFT)
 end
 
 function Worker:right(nTimes)
-    logger("FUNC => Worker:right | param (nTimes): " .. nTimes)
+    logger("FUNC => Worker:right | param (nTimes): ", nTimes)
 
-    logger("Worker:right")
+
+
+
     Worker:turnRight(nTimes)
     Worker:forward(nTimes)
 
 end
 
 function Worker:left(nTimes)
-    logger("FUNC => Worker:left | param (nTimes): " .. nTimes)
+    logger("FUNC => Worker:left | param (nTimes): ", nTimes)
 
-    logger("Worker:left")
+
+
+
     if Worker:turnLeft(nTimes) and Worker:forward(nTimes) then
         return true
     end
@@ -241,27 +181,33 @@ function Worker:left(nTimes)
 end
 
 function Worker:back(nTimes)
-    logger("FUNC => Worker:back | param (nTimes): " .. nTimes)
+    logger("FUNC => Worker:back | param (nTimes): ", nTimes)
 
-    logger("Worker:back")
+
+
+
     return executeAction(ActionsTypes.BACK, nTimes)
 end
-
-
 
 function Worker:undo()
     logger("FUNC => Worker:undo")
 
-    logger("Worker:undo()")
-    local function getLastAction(history)
-    logger("FUNC => getLastAction | param (history): " .. history)
 
-        local result  = history[#history]
-        return result[1],result[2]
+
+
+    local function getLastAction(history)
+        logger("FUNC => getLastAction | param (history): ", history)
+
+
+
+        local result = history[#history]
+        return result.action, result.nTimes
     end
 
     local function opositeAction(actionType)
-    logger("FUNC => opositeAction | param (actionType): " .. actionType)
+        logger("FUNC => opositeAction | param (actionType): ", actionType)
+
+
 
         if actionType == ActionsTypes.FORWARD then
             return ActionsTypes.BACK
@@ -290,15 +236,12 @@ function Worker:undo()
     table.remove(history, #history)
 end
 
-
-
-
-
-
 function Worker:location(array)
-    logger("FUNC => Worker:location | param (array): " .. array)
+    logger("FUNC => Worker:location | param (array): ", array)
 
-    logger("Worker:location")
+
+
+
     local x, y, z = gps.locate()
     if array then
         return { x, z, y }
@@ -309,7 +252,9 @@ end
 function Worker.inspect(side)
 
     local function getInspectResult(inspect)
-    logger("FUNC => getInspectResult | param (inspect): " .. inspect)
+        logger("FUNC => getInspectResult | param (inspect): ", inspect)
+
+
 
 
         local success, data = inspect()
@@ -330,13 +275,15 @@ end
 function Worker:isAtStation()
     logger("FUNC => Worker:isAtStation")
 
+
+
     local dataBottom = Worker.inspect("bottom")
     local backTypes = { peripheral.getType("back") }
 
     if dataBottom.name ~= Station.Blocks.IRON_BLOCK then
         return false
     end
-    for typeK,typeV in pairs(backTypes) do
+    for typeK, typeV in pairs(backTypes) do
         if typeV == Station.Blocks.INVENTORY then
             return true
         end
@@ -345,20 +292,28 @@ function Worker:isAtStation()
 end
 
 local function faceToRelativeSide(relativeSide)
-    logger("FUNC => faceToRelativeSide | param (relativeSide): " .. relativeSide)
+    logger("FUNC => faceToRelativeSide | param (relativeSide): ", relativeSide)
 
-  
+
+
+
     local function closeToRight(direction)
-    logger("FUNC => closeToRight | param (direction): " .. direction)
+        logger("FUNC => closeToRight | param (direction): ", direction)
+
+
 
         -- TODO
         return true
     end
-    logger("FaceToRelativeSide")
+
     local direction = Worker.direction
     while relativeSide ~= direction do
         direction = Worker.direction
-        --logger(direction,relativeSide)
+        logger("LOOP => while relativeSide ~= direction : ", "relativeSide: " .. relativeSide, "direction: " .. direction)
+        if relativeSide == direction then
+            break
+        end
+        --
         if closeToRight(direction) then
             Worker:turnRight()
         else
@@ -371,11 +326,32 @@ function Worker:faceToFront()
     logger("FUNC => Worker:faceToFront")
 
 
+
+
+    faceToRelativeSide(Station.relativeFront)
+end
+
+function Worker:faceToRelativeFront()
+    logger("FUNC => Worker:faceToRelativeFront")
+
+
+
+
     faceToRelativeSide(Worker.relativeFront)
 end
 
 function Worker:faceToBack()
     logger("FUNC => Worker:faceToBack")
+
+
+
+    faceToRelativeSide(Station.relativeBack)
+end
+
+function Worker:faceToRelativeBack()
+    logger("FUNC => Worker:faceToRelativeBack")
+
+
 
     faceToRelativeSide(Worker.relativeBack)
 end
@@ -383,24 +359,46 @@ end
 function Worker:faceToRight()
     logger("FUNC => Worker:faceToRight")
 
-    faceToRelativeSide(Worker.relativeRight)
+
+
+    faceToRelativeSide(Station.relativeRight)
+end
+
+function Worker:faceToRelativeRight()
+    logger("FUNC => Worker:faceToRelativeRight")
+
+
+
+    faceToRelativeSide(Worker.relativeLeft)
 end
 
 function Worker:faceToLeft()
     logger("FUNC => Worker:faceToLeft")
+
+
+
+    faceToRelativeSide(Station.relativeLeft)
+end
+
+function Worker:faceToRelativeLeft()
+    logger("FUNC => Worker:faceToRelativeLeft")
+
+
 
     faceToRelativeSide(Worker.relativeLeft)
 end
 
 function Worker:getGridLocation()
     logger("FUNC => Worker:getGridLocation")
-    logger("RETURN => " .. Worker.gridLocation)
+
+
+
 
     return Worker.gridLocation
 end
 
 function Worker:setGridLocation(row, col)
-    logger("FUNC => Worker:setGridLocation | param (row, col): " .. row, col)
+    logger("FUNC => Worker:setGridLocation | param (row, col): ", row, col)
 
     Worker.gridLocation = { row = row, col = col }
 end
@@ -408,11 +406,17 @@ end
 function Worker:refuel()
     logger("FUNC => Worker:refuel")
 
+
+
     local function refuelOnStation()
-    logger("FUNC => refuelOnStation")
+        logger("FUNC => refuelOnStation")
+
+
 
         local function isFuelLowerThan(limit)
-    logger("FUNC => isFuelLowerThan | param (limit): " .. limit)
+            logger("FUNC => isFuelLowerThan | param (limit): ", limit)
+
+
 
             local maxFuel = turtle.getFuelLimit()
             local currentFuel = turtle.getFuelLevel()
@@ -434,6 +438,8 @@ end
 function Worker:goToStation()
     logger("FUNC => Worker:goToStation")
 
+
+
     local gridLocation = Worker:getGridLocation()
     if (gridLocation.row == 0 or gridLocation.col == 0) then
         if Worker.direction ~= Worker.relativeFront then
@@ -447,22 +453,25 @@ function Worker:goToStation()
 end
 
 function Worker:insertItem(item)
-    logger("FUNC => Worker:insertItem | param (item): " .. item)
+    logger("FUNC => Worker:insertItem | param (item): ", item)
+
+
 
 
 end
 
 function Worker:replaceItem(item)
-    logger("FUNC => Worker:replaceItem | param (item): " .. item)
+    logger("FUNC => Worker:replaceItem | param (item): ", item)
+
+
 
 
 end
 
 function Worker:removeItem(item)
-    logger("FUNC => Worker:removeItem | param (item): " .. item)
+    logger("FUNC => Worker:removeItem | param (item): ", item)
+
+
 
 
 end
-
-
-

@@ -1,22 +1,33 @@
 require("my_debug")
 require("controller")
+require("station")
 farmlandData = nil -- unserialiseJSON(farmlandDataJson)
-debug(true)
+initDebug(true)
 
 
 
 
 local function parseArguments(arg)
-    logger("FUNC => parseArguments | param (arg): " .. arg)
+    logger("FUNC => parseArguments | param (arg): ", arg)
+
+
 
     local function validation(input)
-    logger("FUNC => validation | param (input): " .. input)
+    logger("FUNC => validation | param (input): ", input)
+
+        logger("FUNC => validation | param (input): ", input)
+
+
 
         return string.match(input, "%d+x%d+")
     end
 
     local function split(input, pattern)
-    logger("FUNC => split | param (input, pattern): " .. input, pattern)
+    logger("FUNC => split | param (input, pattern): ", input, pattern)
+
+        logger("FUNC => split | param (input, pattern): ", input, pattern)
+
+
 
         local substrings = {}
         for substring in string.gmatch(input, "[^" .. pattern .. "]+") do
@@ -34,34 +45,64 @@ end
 local function getWorkplaceData()
     logger("FUNC => getWorkplaceData")
 
+
+
     local function read_file(path)
         local file = fs.open(path, "r")
         local contents = file.readAll()
         file.close()
         return textutils.unserialiseJSON(contents)
     end
+
     local result = read_file("./farmland/farmland_data.json");
-    return result.workplace    
+    return result.workplace
 end
 
 local function scan()
     logger("FUNC => scan")
 
+
+    local function getDirectionFromTypes(direction)
+    logger("FUNC => getDirectionFromTypes | param (direction): ", direction)
+
+        if DirectionTypes.NORTH == direction then
+            return DirectionTypes.NORTH
+        end
+        if DirectionTypes.SOUTH == direction then
+            return DirectionTypes.SOUTH
+        end
+        if DirectionTypes.WEST == direction then
+            return DirectionTypes.WEST
+        end
+        if DirectionTypes.EAST == direction then
+            return DirectionTypes.EAST
+        end
+    end
+
+
     if not Worker.direction then
         local direction = Controller:recheckDirection()
+        logger("FUNC => scan RESULT => direction", direction)
         Worker.direction = direction
         Worker:changeDirection(direction)
-    end
-    logger("Worker.relativeFront "..Worker.relativeFront)
-    logger("Worker.relativeBack " ..Worker.relativeBack)
-    logger("Worker.relativeRight "..Worker.relativeRight)
-    logger("Worker.relativeLeft "..Worker.relativeLeft)
+        Station.relativeFront = getDirectionFromTypes(Worker.relativeFront)
+        Station.relativeRight = getDirectionFromTypes(Worker.relativeRight)
+        Station.relativeLeft = getDirectionFromTypes(Worker.relativeLeft)
+        Station.relativeBack = getDirectionFromTypes(Worker.relativeBack)
 
-    logger("Worker.direction, ".. Worker.direction)
+    end
+
+
+
+
+
+
     local workplace = getWorkplaceData()
     local size = tonumber(workplace.width)
+    Worker:faceToRight()
+    local lastRight = true
     for row = 1, tonumber(workplace.lenght) do
-        if (Worker.relativeRight == Worker.direction) then
+        if lastRight then
             Controller:moveByRightCol(row, size)
         else
             Controller:moveByLeftCol(row, size)
@@ -70,13 +111,19 @@ local function scan()
 end
 
 local function plant(selectArea, seed, farmland)
-    logger("FUNC => plant | param (selectArea, seed, farmland): " .. selectArea, seed, farmland)
+    logger("FUNC => plant | param (selectArea, seed, farmland): ", selectArea, seed, farmland)
+
+
 
     local storage = Station:getStorage()
     local inventory = Worker:getInventory()
 
     local function isMinTier()
     logger("FUNC => isMinTier")
+
+        logger("FUNC => isMinTier")
+
+
 
         local seedTier = farmlandData.findTier(seed)
         local farmlandTier = farmlandData.findTier(farmland)
@@ -113,18 +160,24 @@ local function replace()
     logger("FUNC => replace")
 
 
+
+
 end
 
 function abort(reasson)
-    logger("FUNC => abort | param (reasson): " .. reasson)
+    logger("FUNC => abort | param (reasson): ", reasson)
 
-    logger("*********** ABORT **********")
-    logger(reasson)
+
+
+
+
     error(reasson)
 end
 
 local function setup()
     logger("FUNC => setup")
+
+
 
     if not Worker:isAtStation() then
         Worker:goToStation()
@@ -137,6 +190,8 @@ function run()
     logger("FUNC => run")
 
 
+
+
     if #arg <= 0 then
         return error("No argument provided")
     end
@@ -147,19 +202,14 @@ function run()
 
 end
 
-
-
 function print_call_stack()
     local level = 1
     while true do
-      local info = debug.getinfo(level, "nSl")
-      if not info then break end
-      print(string.format("%d\t%s\t%s:%d", level, info.name, info.source, info.currentline))
-      level = level + 1
+        local info = debug.getinfo(level, "nSl")
+        if not info then break end
+        print(string.format("%d\t%s\t%s:%d", level, info.name, info.source, info.currentline))
+        level = level + 1
     end
-  end
+end
 
-  xpcall(run, function(err)
-    print(debug.traceback(err))
-    print_call_stack()
-  end)
+run()
