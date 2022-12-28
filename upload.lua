@@ -1,4 +1,4 @@
-local TOKEN = "LcslDOmQVzpqvgviuoBS37BykW5BPqE4"
+local TOKEN = ""
 local baseUrl = "https://cc-my-scripts.cyclic.app/"
 
 
