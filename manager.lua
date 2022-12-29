@@ -14,20 +14,11 @@ local function parseArguments(arg)
 
     local function validation(input)
         logger("FUNC => validation | param (input): ", input)
-
-        logger("FUNC => validation | param (input): ", input)
-
-
-
         return string.match(input, "%d+x%d+")
     end
 
     local function split(input, pattern)
         logger("FUNC => split | param (input, pattern): ", input, pattern)
-
-        logger("FUNC => split | param (input, pattern): ", input, pattern)
-
-
 
         local substrings = {}
         for substring in string.gmatch(input, "[^" .. pattern .. "]+") do
@@ -64,6 +55,7 @@ local function scan()
     if Worker:isAtStation() then
         Worker:forward(2)
     end
+
     local workplace = getWorkplaceData()
     local size = tonumber(workplace.width)
     local lastRight = true
@@ -78,10 +70,11 @@ local function scan()
     end
     if not Worker:isAtStation() then
         local workerPosition = Worker:getGridLocation()
-        Controller:toPosition(workerPosition.row,workerPosition.col,1,1)
+        Controller:toDestination(1,1)
         Worker:faceToFront()
         Worker:back(2)
     end
+    
 end
 
 local function plant(selectArea, seed, farmland)

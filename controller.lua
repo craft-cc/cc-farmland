@@ -1,42 +1,85 @@
 require("worker")
 Controller = {}
 
-function Controller:moveInRows(fromRow, fromColumn, toRow, toColumn)
-    logger("FUNC => Controller:moveInRows | param (fromRow, fromColumn, toRow, toColumn): ", fromRow, fromColumn, toRow,
-        toColumn)
+
+function Controller:toDestination(destRow, destCol)
+    logger("FUNC => Controller:toDestination | param (destRow, destCol): ", destRow, destCol)
+    local workerLocation = Worker:getGridLocation()
+    local initRow, initCol = workerLocation.row, workerLocation.col --5 --5
+    local function toDestRow()
+        logger("FUNC => toDestRow")
+        local pass = 1
+        local loopEnd = destRow  -- 1
+        local loopStart = initRow --5
+        if initRow > destRow then
+            pass = -1
+          --  loopEnd = initRow --5
+        end
+        for row = loopStart + pass, loopEnd,pass do
+            logger("LOOP => row = loopStart, pass, loopEnd: ", row, pass,loopEnd)
+            workerLocation = Worker:getGridLocation()
+            Controller:moveInRows(workerLocation.row, row)
+        end
+    end
+
+    local function toDestCol()
+        logger("FUNC => toDestCol")
+        local pass = 1
+        local loopEnd = destCol
+        local loopStart = initCol
+        if initCol > destCol then
+            pass = -1
+           -- loopEnd = initCol
+        end
+        for col = loopStart + pass, loopEnd,pass do
+            logger("LOOP => col = loopStart, pass, loopEnd: ", col, pass,loopEnd)
+            workerLocation = Worker:getGridLocation()
+            Controller:moveInColumns(workerLocation.col, col,true)
+        end
+    end
+
+    toDestRow()
+    toDestCol()
+end
+
+function Controller:moveInRows(fromRow, toRow)
+    logger("FUNC => Controller:moveInRows | param (fromRow, toRow): ", fromRow, toRow)
     if fromRow == toRow then
         return
     end
 
-
     if fromRow > toRow then
         Worker:faceToBack()
         Worker:forward()
+        Worker:getGridLocation().row = toRow
         return
     end
     Worker:faceToFront()
     Worker:forward()
+    Worker:getGridLocation().row = toRow
+
 
 end
 
-function Controller:moveInColumns(fromRow, fromColumn, toRow, toColumn)
-    logger("FUNC => Controller:moveInColumns | param (fromRow, fromColumn, toRow, toColumn): ", fromRow, fromColumn,
-        toRow, toColumn)
+function Controller:moveInColumns(fromColumn, toColumn,afterFaceDirection)
+    logger("FUNC => Controller:moveInColumns | param (fromColumn, toColumn): ", fromColumn, toColumn)
     if fromColumn == toColumn then
         return
     end
 
     if fromColumn > toColumn then
-        if fromColumn == 1 or fromColumn == 16 then
+        if  afterFaceDirection or (fromColumn == 1 or fromColumn == 16) then
             Worker:faceToLeft()
         end
         Worker:forward()
     elseif fromColumn < toColumn then
-        if fromColumn == 1 or fromColumn == 16 then
+        if afterFaceDirection or (fromColumn == 1 or fromColumn == 16) then
             Worker:faceToRight()
         end
         Worker:forward()
     end
+    Worker:getGridLocation().col = toColumn
+
 
 end
 
@@ -44,7 +87,7 @@ function Controller:moveByRightCol(row, size)
     logger("FUNC => Controller:moveByRightCol | param (row,size): ", row, size)
 
 
-    
+
     for col = 1, size, 1 do
         local workerLocation = Worker:getGridLocation()
         local initRow, initCol = workerLocation.row, workerLocation.col
@@ -69,8 +112,8 @@ function Controller:toPosition(fromRow, fromColumn, toRow, toColumn)
         toColumn)
 
 
-    Controller:moveInRows(fromRow, fromColumn, toRow, toColumn) --   __
-    Controller:moveInColumns(fromRow, fromColumn, toRow, toColumn) --   |
+    Controller:moveInRows(fromRow, toRow) --   __
+    Controller:moveInColumns(fromRow, toColumn) --   |
 end
 
 function Controller:recheckDirection()

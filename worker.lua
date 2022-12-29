@@ -408,7 +408,7 @@ function Worker:faceToRelativeLeft()
 end
 
 function Worker:getGridLocation()
-    logger("FUNC => Worker:getGridLocation")
+    logger("FUNC => Worker:getGridLocation: ",Worker.gridLocation)
 
 
 
