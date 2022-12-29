@@ -70,6 +70,12 @@ function logger(...)
     local input = table.concat(strs, " ")
     local level = PriorityLevels.DEBUG
     local info = debug.getinfo(2, "Sl")
+    local parentInfo = debug.getinfo(3, "Sl")
+
+    local parentFile = info.source
+    parentFile = parentFile:sub(2) -- remove the "@" symbol from the beginning of the file name
+    local parentLineNumber = parentInfo.currentline
+
     local file = info.source
     file = file:sub(2) -- remove the "@" symbol from the beginning of the file name
     local lineNumber = info.currentline
@@ -80,7 +86,7 @@ function logger(...)
         return
     end
     print(line)
-    line = "[" .. date .. "] - [" .. file .. " | line: " .. lineNumber .. "] - " .. line
+    line = "[" .. date .. "] -" .. "[" .. parentFile .. " | line: " .. parentLineNumber .. "] - [" .. file .. " | line: " .. lineNumber .. "] - " .. line
     local logFile = fs.open("log.txt", "a")
     logFile.write(line)
     logFile.close()

@@ -27,10 +27,14 @@ function Controller:moveInColumns(fromRow, fromColumn, toRow, toColumn)
     end
 
     if fromColumn > toColumn then
-        Worker:faceToLeft()
+        if fromColumn == 1 or fromColumn == 16 then
+            Worker:faceToLeft()
+        end
         Worker:forward()
     elseif fromColumn < toColumn then
-        Worker:faceToRight()
+        if fromColumn == 1 or fromColumn == 16 then
+            Worker:faceToRight()
+        end
         Worker:forward()
     end
 
@@ -40,9 +44,10 @@ function Controller:moveByRightCol(row, size)
     logger("FUNC => Controller:moveByRightCol | param (row,size): ", row, size)
 
 
-    local workerLocation = Worker:getGridLocation()
-    local initRow, initCol = workerLocation.row, workerLocation.col
+    
     for col = 1, size, 1 do
+        local workerLocation = Worker:getGridLocation()
+        local initRow, initCol = workerLocation.row, workerLocation.col
         Controller:toPosition(initRow, initCol, row, col)
         Worker:setGridLocation(row, col)
     end
@@ -51,9 +56,9 @@ end
 function Controller:moveByLeftCol(row, size)
     logger("FUNC => Controller:moveByLeftCol | param (row,size): ", row, size)
 
-    local workerLocation = Worker:getGridLocation()
-    local initRow, initCol = workerLocation.row, workerLocation.col
     for col = size, 1, -1 do
+        local workerLocation = Worker:getGridLocation()
+        local initRow, initCol = workerLocation.row, workerLocation.col
         Controller:toPosition(initRow, initCol, row, col)
         Worker:setGridLocation(row, col)
     end

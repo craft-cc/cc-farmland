@@ -17,11 +17,32 @@ Station = {
 _stationLocation = nil
 
 
+
+function Station:setStationDirections()
+    logger("FUNC => Station:setStationDirections")
+    local function getDirectionFromTypes(direction)
+        logger("FUNC => getDirectionFromTypes | param (direction): ", direction)
+        if DirectionTypes.NORTH == direction then
+            return DirectionTypes.NORTH
+        end
+        if DirectionTypes.SOUTH == direction then
+            return DirectionTypes.SOUTH
+        end
+        if DirectionTypes.WEST == direction then
+            return DirectionTypes.WEST
+        end
+        if DirectionTypes.EAST == direction then
+            return DirectionTypes.EAST
+        end
+    end
+    Station.relativeFront = getDirectionFromTypes(Worker.relativeFront)
+    Station.relativeRight = getDirectionFromTypes(Worker.relativeRight)
+    Station.relativeLeft = getDirectionFromTypes(Worker.relativeLeft)
+    Station.relativeBack = getDirectionFromTypes(Worker.relativeBack)
+end
+
 function Station:setLocation()
     logger("FUNC => Station:setLocation")
-
-    
-
     Worker:isAtStation()
     local x,z,y = Worker:location()
     _stationLocation = {x,z,y}

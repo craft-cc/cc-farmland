@@ -13,7 +13,7 @@ local function parseArguments(arg)
 
 
     local function validation(input)
-    logger("FUNC => validation | param (input): ", input)
+        logger("FUNC => validation | param (input): ", input)
 
         logger("FUNC => validation | param (input): ", input)
 
@@ -23,7 +23,7 @@ local function parseArguments(arg)
     end
 
     local function split(input, pattern)
-    logger("FUNC => split | param (input, pattern): ", input, pattern)
+        logger("FUNC => split | param (input, pattern): ", input, pattern)
 
         logger("FUNC => split | param (input, pattern): ", input, pattern)
 
@@ -58,55 +58,29 @@ local function getWorkplaceData()
     return result.workplace
 end
 
+
 local function scan()
     logger("FUNC => scan")
-
-
-    local function getDirectionFromTypes(direction)
-    logger("FUNC => getDirectionFromTypes | param (direction): ", direction)
-
-        if DirectionTypes.NORTH == direction then
-            return DirectionTypes.NORTH
-        end
-        if DirectionTypes.SOUTH == direction then
-            return DirectionTypes.SOUTH
-        end
-        if DirectionTypes.WEST == direction then
-            return DirectionTypes.WEST
-        end
-        if DirectionTypes.EAST == direction then
-            return DirectionTypes.EAST
-        end
+    if Worker:isAtStation() then
+        Worker:forward(2)
     end
-
-
-    if not Worker.direction then
-        local direction = Controller:recheckDirection()
-        logger("FUNC => scan RESULT => direction", direction)
-        Worker.direction = direction
-        Worker:changeDirection(direction)
-        Station.relativeFront = getDirectionFromTypes(Worker.relativeFront)
-        Station.relativeRight = getDirectionFromTypes(Worker.relativeRight)
-        Station.relativeLeft = getDirectionFromTypes(Worker.relativeLeft)
-        Station.relativeBack = getDirectionFromTypes(Worker.relativeBack)
-
-    end
-
-
-
-
-
-
     local workplace = getWorkplaceData()
     local size = tonumber(workplace.width)
-    Worker:faceToRight()
     local lastRight = true
     for row = 1, tonumber(workplace.lenght) do
         if lastRight then
             Controller:moveByRightCol(row, size)
+            lastRight = false
         else
             Controller:moveByLeftCol(row, size)
+            lastRight = true
         end
+    end
+    if not Worker:isAtStation() then
+        local workerPosition = Worker:getGridLocation()
+        Controller:toPosition(workerPosition.row,workerPosition.col,1,1)
+        Worker:faceToFront()
+        Worker:back(2)
     end
 end
 
@@ -119,7 +93,7 @@ local function plant(selectArea, seed, farmland)
     local inventory = Worker:getInventory()
 
     local function isMinTier()
-    logger("FUNC => isMinTier")
+        logger("FUNC => isMinTier")
 
         logger("FUNC => isMinTier")
 
@@ -176,14 +150,8 @@ end
 
 local function setup()
     logger("FUNC => setup")
-
-
-
-    if not Worker:isAtStation() then
-        Worker:goToStation()
-    end
+    Worker:initialize()
     Worker:refuel()
-    Worker:forward(2)
 end
 
 function run()

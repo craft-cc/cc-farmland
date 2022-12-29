@@ -42,6 +42,25 @@ ActionsTypes = {
 }
 
 
+function Worker:initialize()
+    logger("FUNC => Worker:initialize")
+
+    local function defineDirections()
+        logger("FUNC => defineDirections")
+        local direction = Controller:recheckDirection()
+        Worker.direction = direction
+        Worker:changeDirection(direction)
+        Station:setStationDirections()
+    end
+    if not Worker:isAtStation() then
+        Worker:goToStation()
+    end
+    if not Worker.direction then
+        defineDirections()
+    end
+
+end
+
 local function executeAction(actionType, nTimes)
     logger("FUNC => executeAction | param (actionType, nTimes): ", actionType, nTimes)
 
@@ -94,7 +113,7 @@ function Worker:changeDirection(currentDirection, actionType)
         Worker.relativeFront = direction[1]
         Worker.relativeRight = direction[2]
         Worker.relativeLeft = direction[3]
-        Worker.relativebACK = direction[4]
+        Worker.relativeBack = direction[4]
     end
 
     function swipeDirections(direction)
