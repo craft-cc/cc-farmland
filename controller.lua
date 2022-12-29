@@ -113,7 +113,7 @@ function Controller:toPosition(fromRow, fromColumn, toRow, toColumn)
 
 
     Controller:moveInRows(fromRow, toRow) --   __
-    Controller:moveInColumns(fromRow, toColumn) --   |
+    Controller:moveInColumns(fromColumn, toColumn) --   |
 end
 
 function Controller:recheckDirection()

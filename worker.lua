@@ -172,7 +172,7 @@ function Worker:turnLeft(nTimes)
     if error then
         return false
     end
-    Worker:hangeDirection(Worker.direction, ActionsTypes.TURN_LEFT)
+    Worker:changeDirection(Worker.direction, ActionsTypes.TURN_LEFT)
 end
 
 function Worker:right(nTimes)
@@ -318,14 +318,19 @@ local function faceToRelativeSide(relativeSide)
 
     local function closeToRight(direction)
         logger("FUNC => closeToRight | param (direction): ", direction)
+        local rightLookup = {
+            north = "east",
+            east = "south",
+            south = "west",
+            west = "north"
+        }
+        logger("BOOLEAN => rightLookup[Worker.direction] ==direction: ", rightLookup[Worker.direction], Worker.direction)
 
-
-
-        -- TODO
-        return true
+        return rightLookup[Worker.direction] ==direction
     end
 
     local direction = Worker.direction
+    local isCloseToRight = closeToRight(relativeSide)
     while relativeSide ~= direction do
         direction = Worker.direction
         logger("LOOP => while relativeSide ~= direction : ", "relativeSide: " .. relativeSide, "direction: " .. direction)
@@ -333,7 +338,7 @@ local function faceToRelativeSide(relativeSide)
             break
         end
         --
-        if closeToRight(direction) then
+        if isCloseToRight then
             Worker:turnRight()
         else
             Worker:turnLeft()
