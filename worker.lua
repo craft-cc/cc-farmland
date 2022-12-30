@@ -141,21 +141,8 @@ function Worker:changeDirection(currentDirection, actionType)
 
 end
 
-function Worker:forward(nTimes)
-    logger("FUNC => Worker:forward | param (nTimes): ", nTimes)
-
-
-
-
-    return executeAction(ActionsTypes.FORWARD, nTimes)
-end
-
 function Worker:turnRight(nTimes)
     logger("FUNC => Worker:turnRight | param (nTimes): ", nTimes)
-
-
-
-    --
     local error = not executeAction(ActionsTypes.TURN_RIGHT, nTimes)
     if error then
         return false
@@ -165,10 +152,6 @@ end
 
 function Worker:turnLeft(nTimes)
     logger("FUNC => Worker:turnLeft | param (nTimes): ", nTimes)
-
-
-
-
     local error = not executeAction(ActionsTypes.TURN_LEFT, nTimes)
     if error then
         return false
@@ -176,12 +159,18 @@ function Worker:turnLeft(nTimes)
     Worker:changeDirection(Worker.direction, ActionsTypes.TURN_LEFT)
 end
 
+function Worker:forward(nTimes)
+    logger("FUNC => Worker:forward | param (nTimes): ", nTimes)
+    return executeAction(ActionsTypes.FORWARD, nTimes)
+end
+
+function Worker:back(nTimes)
+    logger("FUNC => Worker:back | param (nTimes): ", nTimes)
+    return executeAction(ActionsTypes.BACK, nTimes)
+end
+
 function Worker:right(nTimes)
     logger("FUNC => Worker:right | param (nTimes): ", nTimes)
-
-
-
-
     Worker:turnRight(nTimes)
     Worker:forward(nTimes)
 
@@ -189,10 +178,6 @@ end
 
 function Worker:left(nTimes)
     logger("FUNC => Worker:left | param (nTimes): ", nTimes)
-
-
-
-
     if Worker:turnLeft(nTimes) and Worker:forward(nTimes) then
         return true
     end
@@ -200,35 +185,16 @@ function Worker:left(nTimes)
 
 end
 
-function Worker:back(nTimes)
-    logger("FUNC => Worker:back | param (nTimes): ", nTimes)
-
-
-
-
-    return executeAction(ActionsTypes.BACK, nTimes)
-end
-
 function Worker:undo()
     logger("FUNC => Worker:undo")
-
-
-
-
     local function getLastAction(history)
         logger("FUNC => getLastAction | param (history): ", history)
-
-
-
         local result = history[#history]
         return result.action, result.nTimes
     end
 
     local function opositeAction(actionType)
         logger("FUNC => opositeAction | param (actionType): ", actionType)
-
-
-
         if actionType == ActionsTypes.FORWARD then
             return ActionsTypes.BACK
         end
@@ -258,10 +224,6 @@ end
 
 function Worker:location(array)
     logger("FUNC => Worker:location | param (array): ", array)
-
-
-
-
     local x, y, z = gps.locate()
     if array then
         return { x, z, y }
@@ -269,34 +231,8 @@ function Worker:location(array)
     return x, z, y
 end
 
-function Worker.inspect(side)
-
-    local function getInspectResult(inspect)
-        logger("FUNC => getInspectResult | param (inspect): ", inspect)
-
-
-
-
-        local success, data = inspect()
-        if success then
-            return data
-        end
-        error("Inspect " .. side .. " failed")
-    end
-
-    if not side then side = "front" end
-    if side == 'front' then return getInspectResult(turtle.inspect) end
-    if side == 'top' then return getInspectResult(turtle.inspectUp) end
-    if side == 'bottom' then return getInspectResult(turtle.inspectDown) end
-    error("The " .. side .. " property you have specified is not supported or does not exist.")
-
-end
-
 function Worker:isAtStation()
     logger("FUNC => Worker:isAtStation")
-
-
-
     local dataBottom = Worker.inspect("bottom")
     local backTypes = { peripheral.getType("back") }
 
@@ -308,15 +244,11 @@ function Worker:isAtStation()
             return true
         end
     end
-
 end
+
 
 local function faceToRelativeSide(relativeSide)
     logger("FUNC => faceToRelativeSide | param (relativeSide): ", relativeSide)
-
-
-
-
     local function closeToRight(direction)
         logger("FUNC => closeToRight | param (direction): ", direction)
         local rightLookup = {
@@ -349,76 +281,67 @@ end
 
 function Worker:faceToFront()
     logger("FUNC => Worker:faceToFront")
-
-
-
-
     faceToRelativeSide(Station.relativeFront)
 end
 
 function Worker:faceToRelativeFront()
     logger("FUNC => Worker:faceToRelativeFront")
-
-
-
-
     faceToRelativeSide(Worker.relativeFront)
 end
 
 function Worker:faceToBack()
     logger("FUNC => Worker:faceToBack")
-
-
-
     faceToRelativeSide(Station.relativeBack)
 end
 
 function Worker:faceToRelativeBack()
     logger("FUNC => Worker:faceToRelativeBack")
-
-
-
     faceToRelativeSide(Worker.relativeBack)
 end
 
 function Worker:faceToRight()
     logger("FUNC => Worker:faceToRight")
-
-
-
     faceToRelativeSide(Station.relativeRight)
 end
 
 function Worker:faceToRelativeRight()
     logger("FUNC => Worker:faceToRelativeRight")
-
-
-
     faceToRelativeSide(Worker.relativeLeft)
 end
 
 function Worker:faceToLeft()
     logger("FUNC => Worker:faceToLeft")
-
-
-
     faceToRelativeSide(Station.relativeLeft)
 end
 
 function Worker:faceToRelativeLeft()
     logger("FUNC => Worker:faceToRelativeLeft")
-
-
-
     faceToRelativeSide(Worker.relativeLeft)
 end
 
+
+
+function Worker.inspect(side)
+
+    local function getInspectResult(inspect)
+        logger("FUNC => getInspectResult | param (inspect): ", inspect)
+        local success, data = inspect()
+        if success then
+            return data
+        end
+        error("Inspect " .. side .. " failed")
+    end
+
+    if not side then side = "front" end
+    if side == 'front' then return getInspectResult(turtle.inspect) end
+    if side == 'top' then return getInspectResult(turtle.inspectUp) end
+    if side == 'bottom' then return getInspectResult(turtle.inspectDown) end
+    error("The " .. side .. " property you have specified is not supported or does not exist.")
+end
+
+
 function Worker:getGridLocation()
     logger("FUNC => Worker:getGridLocation: ", Worker.gridLocation)
-
-
-
-
     return Worker.gridLocation
 end
 
@@ -431,18 +354,10 @@ end
 function Worker:refuel()
     logger("FUNC => Worker:refuel")
 
-
-
     local function refuelOnStation()
         logger("FUNC => refuelOnStation")
-
-
-
         local function isFuelLowerThan(limit)
             logger("FUNC => isFuelLowerThan | param (limit): ", limit)
-
-
-
             local maxFuel = turtle.getFuelLimit()
             local currentFuel = turtle.getFuelLevel()
             local value = (100 * currentFuel) / maxFuel
@@ -462,9 +377,6 @@ end
 
 function Worker:goToStation()
     logger("FUNC => Worker:goToStation")
-
-
-
     local gridLocation = Worker:getGridLocation()
     if (gridLocation.row == 0 or gridLocation.col == 0) then
         if Worker.direction ~= Worker.relativeFront then
@@ -479,18 +391,10 @@ end
 
 function Worker:insertItem(item)
     logger("FUNC => Worker:insertItem | param (item): ", item)
-
-
-
-
 end
 
 function Worker:replaceItem(item)
     logger("FUNC => Worker:replaceItem | param (item): ", item)
-
-
-
-
 end
 
 function Worker:returnToStation()
@@ -511,10 +415,6 @@ end
 
 function Worker:removeItem(item)
     logger("FUNC => Worker:removeItem | param (item): ", item)
-
-
-
-
 end
 
 function Worker:placeItem()

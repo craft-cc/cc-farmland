@@ -143,7 +143,7 @@ local function select(paraments)
     local function execute() Worker:placeItem() end
     if not endArea then
         Controller:toDestination(firstRow, firstCol)
-        returnToStation()
+        Worker:returnToStation()
         return
     end
     local lastRow, lastCol = parseArguments(endArea)
