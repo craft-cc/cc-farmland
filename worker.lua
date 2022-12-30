@@ -52,6 +52,7 @@ function Worker:initialize()
         Worker:changeDirection(direction)
         Station:setStationDirections()
     end
+
     if not Worker:isAtStation() then
         Worker:goToStation()
     end
@@ -326,7 +327,7 @@ local function faceToRelativeSide(relativeSide)
         }
         logger("BOOLEAN => rightLookup[Worker.direction] ==direction: ", rightLookup[Worker.direction], Worker.direction)
 
-        return rightLookup[Worker.direction] ==direction
+        return rightLookup[Worker.direction] == direction
     end
 
     local direction = Worker.direction
@@ -413,7 +414,7 @@ function Worker:faceToRelativeLeft()
 end
 
 function Worker:getGridLocation()
-    logger("FUNC => Worker:getGridLocation: ",Worker.gridLocation)
+    logger("FUNC => Worker:getGridLocation: ", Worker.gridLocation)
 
 
 
@@ -492,10 +493,32 @@ function Worker:replaceItem(item)
 
 end
 
+function Worker:returnToStation()
+    local workerPosition = Worker:getGridLocation()
+    if not Worker:isAtStation() then
+        Controller:toDestination(1, 1)
+        Worker:faceToFront()
+        Worker:back(2)
+    end
+end
+
+function Worker:leaveStation()
+    if Worker:isAtStation() then
+        Worker:faceToFront()
+        Worker:forward(2)
+    end
+end
+
 function Worker:removeItem(item)
     logger("FUNC => Worker:removeItem | param (item): ", item)
 
 
 
 
+end
+
+function Worker:placeItem()
+    logger("FUNC => Worker:placeItem")
+    turtle.select(1)
+    turtle.placeUp()
 end

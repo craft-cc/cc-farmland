@@ -79,7 +79,7 @@ local files = {
 --for index,file in ipairs(files) do print(#files) end
 for index, file in ipairs(files) do
     print("cloud edit " .. file)
-    shell.run("cloud edit " .. file)
+    cloud_catcher.edit(file)
     sleep(0.1)
 end
 

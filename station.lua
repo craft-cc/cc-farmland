@@ -20,25 +20,10 @@ _stationLocation = nil
 
 function Station:setStationDirections()
     logger("FUNC => Station:setStationDirections")
-    local function getDirectionFromTypes(direction)
-        logger("FUNC => getDirectionFromTypes | param (direction): ", direction)
-        if DirectionTypes.NORTH == direction then
-            return DirectionTypes.NORTH
-        end
-        if DirectionTypes.SOUTH == direction then
-            return DirectionTypes.SOUTH
-        end
-        if DirectionTypes.WEST == direction then
-            return DirectionTypes.WEST
-        end
-        if DirectionTypes.EAST == direction then
-            return DirectionTypes.EAST
-        end
-    end
-    Station.relativeFront = getDirectionFromTypes(Worker.relativeFront)
-    Station.relativeRight = getDirectionFromTypes(Worker.relativeRight)
-    Station.relativeLeft = getDirectionFromTypes(Worker.relativeLeft)
-    Station.relativeBack = getDirectionFromTypes(Worker.relativeBack)
+    Station.relativeFront = Worker.relativeFront
+    Station.relativeRight = Worker.relativeRight
+    Station.relativeLeft = Worker.relativeLeft
+    Station.relativeBack = Worker.relativeBack
 end
 
 function Station:setLocation()
