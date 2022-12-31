@@ -44,7 +44,6 @@ end
 function Station:getStorage()
     logger("FUNC => Station:getStorage")
 
-    
-
-
 end
+
+return Station

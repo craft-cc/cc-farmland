@@ -1,13 +1,7 @@
-require("station")
+Station = require("station")
 require("my_debug")
+Inventory = require("inventory")
 
-
-Inventory = {
-    addItem = function(fromInventory)
-    end,
-    transferItem = function(toInvetory)
-    end
-}
 
 Worker = {
     gridLocation = { row = 1, col = 1 },
@@ -17,7 +11,7 @@ Worker = {
     relativeRight = nil,
     relativeLeft = nil,
     relativeBack = nil,
-    inventory = Inventory
+    turtleInventory = Inventory:open("turtle")
 }
 
 
@@ -222,10 +216,10 @@ function Worker:undo()
     table.remove(history, #history)
 end
 
-function Worker:location(array)
+function Worker:location(useArray)
     logger("FUNC => Worker:location | param (array): ", array)
     local x, y, z = gps.locate()
-    if array then
+    if aruseArrayray then
         return { x, z, y }
     end
     return x, z, y
@@ -389,12 +383,55 @@ function Worker:goToStation()
     Worker:back()
 end
 
-function Worker:insertItem(item)
-    logger("FUNC => Worker:insertItem | param (item): ", item)
+function Worker:insertItem(itemName,type)
+    
+    local function placeUpChest()
+        Worker:selectByName("chest")
+        turtle.placeUp()
+    end
+
+    local function breakUpChest()
+        Worker:selectByName("chest")
+        turtle.bigUp()
+    end
+
+    placeUpChest()
+    local chestInventory = Worker:getInventory().transferToChest(itemName)
+    if not chestInventory  then return false, "" end
+
+    local pot = Inventory:open("pot","bottom")
+    if not pot  then return false, "" end
+
+    chestInventory:export(pot,1)
+    breakUpChest()
+
+end
+
+
+
+function Worker:selectByName(name) 
+   local slot = Inventory:getItemByPattern(Worker:getInventory().list(),name)
+   turtle.select(slot)
 end
 
 function Worker:replaceItem(item)
     logger("FUNC => Worker:replaceItem | param (item): ", item)
+end
+
+
+function Worker:geItemFromInventory(pattern)
+    local inventory = Worker:getInventory()
+    for i, item in ipairs(inventory) do
+      if item.name and string.find(item.name, pattern) then
+        logger("item name: ", item.name)
+        return item.slot, item.count
+      end
+    end
+    return nil, 0 -- Return nil and 0 if no matching item was found
+end
+
+function Worker:getInventory()
+    return Worker.turtleInventory
 end
 
 function Worker:returnToStation()
@@ -417,8 +454,8 @@ function Worker:removeItem(item)
     logger("FUNC => Worker:removeItem | param (item): ", item)
 end
 
-function Worker:placeItem()
+function Worker:placeItem(slot)
     logger("FUNC => Worker:placeItem")
-    turtle.select(1)
+    turtle.select(slot)
     turtle.placeUp()
 end
